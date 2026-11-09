@@ -1,0 +1,42 @@
+<!-- BG-CSS -->
+<style>
+  /* Designed background (night-blaze/dark) behind TRANSPARENT plates: deep night ground, a soft blaze glow where the
+     missile sits (<= 12 %), a faint lime dot grid fading to the edges, slow lime dust, a night vignette.
+     Colour rule: only the palette's colours, at lower opacity. */
+  #bg { position:absolute; inset:0; overflow:hidden; background:#111E26; }
+  #glow { position:absolute; left:calc(50% + 330px); top:50%; width:1300px; height:700px; margin:-350px 0 0 -650px; border-radius:50%;
+          background:radial-gradient(closest-side, rgba(247,67,4,0.12), rgba(247,67,4,0.04) 55%, rgba(247,67,4,0) 100%); }
+  #grid { position:absolute; inset:-40px; opacity:0.08;
+          background-image:radial-gradient(circle, #DAFF01 1.4px, transparent 1.6px); background-size:36px 36px;
+          -webkit-mask-image:radial-gradient(ellipse 60% 60% at 55% 50%, #000 0%, transparent 100%);
+                  mask-image:radial-gradient(ellipse 60% 60% at 55% 50%, #000 0%, transparent 100%); }
+  #dust { position:absolute; inset:0; }
+  #vig { position:absolute; inset:0; background:radial-gradient(ellipse 85% 85% at 55% 50%, rgba(17,30,38,0) 55%, rgba(17,30,38,0.9) 100%); }
+  #plate { position:absolute; inset:0; width:1920px; height:1080px; object-fit:cover; }
+</style>
+<!-- BG-HTML -->
+<div id="bg"><div id="glow"></div><div id="grid"></div><canvas id="dust" width="1920" height="1080"></canvas><div id="vig"></div></div>
+<!-- BG-JS -->
+<script>
+  (function () {
+    // dust: 60 seeded motes drifting, drawn from the seek time only (never a clock)
+    const g = document.getElementById('dust').getContext('2d');
+    const motes = Array.from({ length: 60 }, () => ({ x: Math.random() * 1920, y: Math.random() * 1080, r: 0.8 + Math.random() * 2.0,
+      vx: (Math.random() - 0.5) * 10, vy: -3 - Math.random() * 8, a: 0.08 + Math.random() * 0.18, ph: Math.random() * 6.28 }));
+    function draw(t) {
+      g.clearRect(0, 0, 1920, 1080);
+      for (const m of motes) {
+        const x = ((m.x + m.vx * t) % 1920 + 1920) % 1920, y = ((m.y + m.vy * t) % 1080 + 1080) % 1080;
+        g.globalAlpha = m.a * (0.75 + 0.25 * Math.sin(m.ph + t * 0.8));
+        g.fillStyle = '#DAFF01'; g.beginPath(); g.arc(x, y, m.r, 0, Math.PI * 2); g.fill();
+      }
+    }
+    window.addEventListener('hf-seek', (e) => draw(e.detail.time));
+    draw(0);
+  })();
+  window.__bgTween = function (tl, dur) {
+    // slow and small (< 5 % scale): the background never competes with the missile or the words
+    tl.fromTo('#glow', { scale: 0.98, opacity: 0.85 }, { scale: 1.02, opacity: 1, duration: dur / 2, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 0);
+    tl.fromTo('#grid', { x: 0, y: 0 }, { x: -36, y: -18, duration: dur, ease: 'none' }, 0);
+  };
+</script>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* night-blaze/dark: deep night ground, lime words, BLAZE only on the one word or number that matters per frame
+     (never blaze words on lime). Fonts: Unbounded (display), Rajdhani (text, labels), JetBrains Mono (HUD readouts).
+     Video sizes: display >= 72 px, lines >= 48 px, labels >= 30 px. Margin 136 px (7 %).
+     LAYOUT vs the opaque plate (ch1_job.py): ship right of centre in A, missile centre in B, missile band y 400-680 in
+     C2 and D, so words sit in the left column and, from 27 s on, only ABOVE y 380 or BELOW y 720. */
+  :root { --night:#111E26; --blaze:#F74304; --lime:#DAFF01; --lime35:rgba(218,255,1,0.35); --lime15:rgba(218,255,1,0.15);
+          --nightA:rgba(17,30,38,0.82); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--night); color:var(--lime);
+          font-family:'Rajdhani','Hind',sans-serif; }
+  #plate { position:absolute; inset:0; width:1920px; height:1080px; object-fit:cover; }
+  .mono { font-family:'JetBrains Mono','Hind',monospace; }
+  .note { position:absolute; left:136px; top:72px; font:500 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.12em; opacity:0.7; }
+  /* radar scope */
+  #scope { position:absolute; left:136px; top:150px; width:380px; display:flex; flex-direction:column; gap:16px; }
+  #scope .lbl { font:600 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.12em; }
+  #scope svg { width:380px; height:380px; display:block; }
+  #scope .rng { font:500 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.08em; opacity:0.85; }
+  /* number cards under the scope (one at a time) */
+  .card { position:absolute; left:136px; top:700px; width:620px; padding:22px 30px; border-radius:14px; background:var(--nightA);
+          border:2px solid var(--lime35); display:flex; flex-direction:column; gap:30px; }
+  .card .big { font:800 96px/1 'Unbounded','Hind',sans-serif; letter-spacing:-0.01em; font-variant-numeric:tabular-nums; }
+  .card .cap { font:600 48px/1.1 'Rajdhani','Hind',sans-serif; }
+  .card .tag { font:italic 500 30px 'Rajdhani','Hind',sans-serif; opacity:0.8; }
+  #clock { gap:40px; }
+  #clk { margin-left:-3px; }
+  #clock .big { color:var(--blaze); font-family:'JetBrains Mono','Hind',monospace; font-size:132px; font-weight:800; }
+  /* title and number: above / below the missile band */
+  #title { position:absolute; left:136px; top:150px; font:900 150px/1 'Unbounded','Hind',sans-serif; letter-spacing:0.02em; }
+  #mach { position:absolute; left:136px; top:760px; display:flex; flex-direction:column; gap:40px; }
+  #mach .big { font:900 112px/1 'Unbounded','Hind',sans-serif; color:var(--blaze); margin-left:-3px; }
+  #mach .cap { font:600 48px/1.1 'Rajdhani','Hind',sans-serif; }
+  /* the struck-out engine parts */
+  #parts { position:absolute; left:136px; top:120px; display:flex; flex-direction:column; gap:22px; }
+  #parts .head { font:600 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.12em; opacity:0.85; }
+  /* polish v1: a strike bar over lime words read 3.2:1 (blaze on lime): the cross now sits BESIDE the word */
+  #parts .row { display:flex; align-items:center; gap:28px; font:700 64px/1.05 'Unbounded','Hind',sans-serif; }
+  #parts .row b { font:900 64px/1 'Unbounded','Hind',sans-serif; color:var(--blaze); display:inline-block; }
+  #q { position:absolute; left:136px; top:740px; font:900 220px/1 'Unbounded','Hind',sans-serif; color:var(--blaze); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch1" data-start="0" data-duration="45.88" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="note" id="note">3D ILLUSTRATION</div>
+  <div id="scope">
+    <div class="lbl">SURFACE SEARCH RADAR</div>
+    <svg viewBox="-210 -210 420 420">
+      <defs>
+        <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#DAFF01" stop-opacity="0"/><stop offset="1" stop-color="#DAFF01" stop-opacity="0.45"/>
+        </linearGradient>
+      </defs>
+      <circle r="205" fill="rgba(17,30,38,0.82)" stroke="#DAFF01" stroke-opacity="0.6" stroke-width="3"/>
+      <circle r="137" fill="none" stroke="#DAFF01" stroke-opacity="0.25" stroke-width="2"/>
+      <circle r="68" fill="none" stroke="#DAFF01" stroke-opacity="0.25" stroke-width="2"/>
+      <line x1="-205" y1="0" x2="205" y2="0" stroke="#DAFF01" stroke-opacity="0.2" stroke-width="2"/>
+      <line x1="0" y1="-205" x2="0" y2="205" stroke="#DAFF01" stroke-opacity="0.2" stroke-width="2"/>
+      <g id="sweep"><path d="M0 0 L205 0 A205 205 0 0 0 177.5 -102.5 Z" fill="url(#sw)"/>
+        <line x1="0" y1="0" x2="205" y2="0" stroke="#DAFF01" stroke-width="3"/></g>
+      <circle r="7" fill="#DAFF01"/>
+      <g id="blip" transform="translate(170 -98)"><circle id="blipRing" r="12" fill="none" stroke="#F74304" stroke-width="3"/>
+        <circle r="9" fill="#F74304"/></g>
+    </svg>
+    <div class="rng" id="rng">RANGE 30 KM</div>
+  </div>
+  <div class="card" id="speed"><div class="big">≈ 1 KM/S</div><div class="cap">a kilometre every second</div>
+    <div class="tag">illustrative</div></div>
+  <div class="card" id="clock"><div class="big" id="clk">0:30</div><div class="cap">to react</div></div>
+  <div id="title">BRAHMOS</div>
+  <div id="mach"><div class="big">MACH 2.8</div><div class="cap">≈ 3× the speed of sound</div></div>
+  <div id="parts"><div class="head">INSIDE THE ENGINE</div>
+    <div class="row" id="pFan"><span>FAN</span><b>✕</b></div><div class="row" id="pComp"><span>COMPRESSOR</span><b>✕</b></div>
+    <div class="row" id="pTurb"><span>TURBINE</span><b>✕</b></div></div>
+  <div id="q">?</div>
+</div>
+<script>
+  // Every element lands ON its spoken word (audio/transcript_hinglish.json, chapter 1 starts at 0 s).
+  // ONE entrance for every block (rise 24 px, 0.5 s, power3.out), exits 0.4 s. Acting ON words (allowed, kinetic-type.md):
+  // the clock ticking, the strike-throughs, the blip pulse. The sweep turns linearly: a mechanical thing (allowed).
+  const tl = gsap.timeline({ paused: true });
+  const IN = { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' };
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, IN, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  gsap.set(['#note', '#scope', '#speed', '#clock', '#title', '#mach', '#parts', '#q', '#blip'], { autoAlpha: 0 });
+  tl.to('#note', { autoAlpha: 0.7, duration: 0.6, ease: 'power2.out' }, 0.2);
+  inn('#scope', 3.25);                                                   // "रेडार" 3.25
+  tl.fromTo('#sweep', { rotation: 0, svgOrigin: '0 0' }, { rotation: 360 * 23.8 / 4, svgOrigin: '0 0', duration: 23.8, ease: 'none' }, 3.25);
+  tl.set('#blip', { autoAlpha: 1 }, 13.97);                              // "डॉट" 13.97: the blip at the scope's edge
+  tl.fromTo('#blip', { x: 170, y: -98 }, { x: 92, y: -53, duration: 13.0, ease: 'none' }, 13.97);   // creeping in
+  for (let t = 13.97; t < 26.9; t += 4.0)                                 // one pulse per sweep: well under 3 flashes a second
+    tl.fromTo('#blipRing', { attr: { r: 10 }, opacity: 1 }, { attr: { r: 30 }, opacity: 0, duration: 1.0, ease: 'power2.out' }, t);
+  inn('#speed', 21.36);  out('#speed', 25.0);                           // "किलोमीटर" 21.36
+  inn('#clock', 25.44);                                                  // "आधा मिनट" 25.44, then it ticks
+  const clk = document.getElementById('clk'); const c = { s: 30 };
+  tl.to(c, { s: 28.4, duration: 1.6, ease: 'none', onUpdate: () => { clk.textContent = '0:' + String(Math.ceil(c.s)).padStart(2, '0'); } }, 25.44);
+  out(['#scope', '#clock'], 26.9);                                       // the cut to the fly-past at 27.0
+  inn('#title', 28.11);                                                  // "ब्रह्मोज़" 28.11
+  inn('#mach', 33.82);                                                   // "तीन गुना" 33.82
+  out('#title', 35.3);                                                   // the cut to the studio at 35.5
+  out('#mach', 35.62);                                                   // motion-check: caption needs 1.35 s (bottom-left: clear of the studio missile)
+  inn('#parts', 39.17);                                                  // "इंजिन" 39.17: the heading and the three parts
+  gsap.set('#parts .row b', { autoAlpha: 0 });
+  tl.fromTo('#pFan b', { autoAlpha: 0, scale: 1.4 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, 40.17);   // "फ़ैन"
+  tl.fromTo('#pComp b', { autoAlpha: 0, scale: 1.4 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, 41.15); // "कंप्रेसर"
+  tl.fromTo('#pTurb b', { autoAlpha: 0, scale: 1.4 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, 42.27); // "टर्बाइन"
+  tl.fromTo('#q', { autoAlpha: 0, scale: 1.25 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, 44.45);  // "कैसे"
+  window.__timelines = { ch1: tl };
+</script>
+</body>
+</html>

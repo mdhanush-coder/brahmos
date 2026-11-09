@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1080px; height:1920px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  #kit { position:absolute; left:20px; top:150px; width:1000px; height:940px; }
+  #splate { position:absolute; left:-210px; top:150px; width:1500px; height:844px; object-fit:cover; }
+  /* key graphics: one restrained element per scene, left-aligned above the captions (y 1090-1370) */
+  .grp { position:absolute; left:80px; top:1090px; width:780px; height:280px; display:flex; flex-direction:column; justify-content:flex-end;
+         align-items:flex-start; gap:10px; }
+  .lab  { font:600 34px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.2em; opacity:0.7; }
+  .big  { font:700 170px/0.95 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.02em; color:var(--gold); }
+  .big2 { font:700 112px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.01em; color:var(--gold); }
+  .dots { display:flex; gap:22px; }
+  .dots i { width:64px; height:64px; border-radius:32px; border:3px solid var(--cream); display:inline-flex; align-items:center; justify-content:center;
+            font:700 34px 'Space Grotesk','Hind',sans-serif; font-style:normal; opacity:0.35; }
+  .stamp { display:inline-block; padding:8px 26px 12px; border:6px solid var(--gold); border-radius:14px; font:700 70px/1 'Space Grotesk','Hind',sans-serif;
+           color:var(--gold); transform:rotate(-4deg); transform-origin:20% 50%; }
+  /* captions: soft fade only, centred, ends at y 1480, clear of the bottom 440 px (title/description) and the right 150 px (buttons) */
+  #cap { position:absolute; left:150px; width:780px; bottom:370px; height:150px; }
+  .c { position:absolute; left:0; right:0; bottom:0; text-align:center; font:500 42px/1.3 'Space Grotesk','Hind',sans-serif; color:var(--cream);
+       opacity:0; text-shadow:0 2px 14px rgba(0,0,0,0.75); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="short" data-start="0" data-duration="89.3" data-width="1080" data-height="1920">
+  <!--PLATE-->
+  <video id="splate" src="assets/render.webm" muted playsinline data-start="0" data-duration="36.22"></video>
+  <div id="kit"></div>
+  <div class="grp" id="g0"><div class="big" id="g0_0">₹85,000</div></div>
+  <div class="grp" id="g1"><div class="lab" id="g1_0">BY DEEPINDER GOYAL</div><div class="big2" id="g1_1">$25M</div><div class="lab" id="g1_2">OF HIS OWN MONEY</div></div>
+  <div class="grp" id="g2"><div class="lab" id="g2_0">INSIDE: SHELL, BATTERY, BOARDS, SENSORS</div><div class="lab" id="g2_1">THE BRAIN FLOW SCORE</div></div>
+  <div class="grp" id="g3"><div class="lab" id="g3_0">ONE ARTERY FEEDS THE SKIN, ANOTHER FEEDS THE BRAIN</div><div class="big2" id="g3_1">Whose blood?</div></div>
+  <div class="grp" id="g4"><div class="lab" id="g4_0">THE COMPANY’S TWO STUDIES</div><div class="big2" id="g4_1">≈ 0.8</div><div class="big2" id="g4_2">59 / 60</div></div>
+  <div class="grp" id="g5"><div class="lab" id="g5_0">THE DOCTORS’ FOUR OBJECTIONS</div><div class="dots" id="g5_1"><i>1</i><i>2</i><i>3</i><i>4</i></div></div>
+  <div class="grp" id="g6"><div class="lab" id="g6_0">THE GRAVITY AGEING THEORY</div><div class="stamp" id="g6_1">PSEUDOSCIENCE</div></div>
+  <div class="grp" id="g7"><div class="big2" id="g7_0">An experiment</div><div class="lab" id="g7_1">YOUR CALL — COMMENT BELOW</div></div>
+  <div id="cap"><div class="c" id="c0">Eighty-five thousand rupees, for a tiny gold device</div><div class="c" id="c1">that you stick on your temple</div><div class="c" id="c2">Pre-orders opened, and the website crashed</div><div class="c" id="c3">Doctors called it an expensive toy</div><div class="c" id="c4">It is Temple, built by Zomato’s founder, Deepinder Goyal</div><div class="c" id="c5">who put in $25 million of his own money</div><div class="c" id="c6">The promise: an estimate of the blood reaching your brain</div><div class="c" id="c7">It sends green, red and infrared light into your skin</div><div class="c" id="c8">Blood absorbs some of it, and the rest returns to a sensor</div><div class="c" id="c9">and an algorithm turns that into a Brain Flow score</div><div class="c" id="c10">But here is the catch: the artery under Temple feeds your skin</div><div class="c" id="c11">while your brain gets blood by a different route</div><div class="c" id="c12">So the real question: whose blood?</div><div class="c" id="c13">Study one: 20 people, a match of about 0.8</div><div class="c" id="c14">Study two: 59 of 60 sessions pointed the same way</div><div class="c" id="c15">But both studies are still preprints</div><div class="c" id="c16">Doctors: the anatomy, and a third of the signal unexplained</div><div class="c" id="c17">Only young, healthy people, and no medical approval</div><div class="c" id="c18">Goyal himself says: fitness and wellness, not medical</div><div class="c" id="c19">The gravity theory: standing upright means less blood to the brain</div><div class="c" id="c20">Doctors call it pseudoscience</div><div class="c" id="c21">So for now, not a big discovery</div><div class="c" id="c22">Not just a toy, but an experiment you can buy</div><div class="c" id="c23">Your call: tell us in the comments</div></div>
+</div>
+<!--BRAINKIT-->
+<script>
+  // GENERATED by make_short.py v2. Times = original take / 1.05. Key graphics rise 24 px once (0.5 s); captions only fade (no movement).
+  const tl = gsap.timeline({ paused: true });
+  const fade = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const gone = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  const B = BrainKit('#kit', { device: true });
+
+  gsap.set('#kit', { opacity: 0 });
+  tl.to('#splate', { opacity: 0, duration: 0.5 }, 35.62);                                         // the 3D model hands over to the drawing
+  tl.to('#kit', { opacity: 1, duration: 0.6 }, 35.62);
+  B.vessels.forEach(v => gsap.set(v, { attr: { stroke: '#FFF8E6' }, opacity: 0.8 }));
+  gsap.set(B.scalp, { attr: { stroke: '#F5B700' }, opacity: 0 });
+  B.drawOn(tl, 35.62, 1.6);
+  B.flow(35.62 + 1.0, 38.38, { period: 1.1, colors: ['#F5B700', '#FFF8E6'], beam: true });
+  tl.to(B.scalp, { opacity: 1, duration: 0.6 }, 38.48);                                           // the scalp artery under the device
+  B.flowScalp(38.48, 41.33, { period: 0.9, colors: ['#F5B700'] });
+  B.flow(41.71, 46.1, { period: 1.0, colors: ['#FFF8E6'] });                                  // the brain's own arteries
+  tl.to(B.scalp, { opacity: 0, duration: 0.5 }, 47.05);
+  tl.to('#kit', { opacity: 0.5, duration: 0.6 }, 47.05);                                          // evidence and doctors: the picture steps back
+  tl.to('#kit', { opacity: 1, duration: 0.6 }, 71.43);
+  B.flow(71.43, 88.1, { period: 1.1, colors: ['#F5B700', '#FFF8E6'], beam: true });         // verdict: the light again
+
+  gsap.set('#g0 > div', { autoAlpha: 0 });
+  fade('#g0_0', 0.03);
+  gone('#g0 > div', 12.0);
+  gsap.set('#g1 > div', { autoAlpha: 0 });
+  fade('#g1_0', 13.14);
+  fade('#g1_1', 19.21);
+  fade('#g1_2', 19.43);
+  gone('#g1 > div', 25.14);
+  gsap.set('#g2 > div', { autoAlpha: 0 });
+  fade('#g2_0', 25.57);
+  fade('#g2_1', 34.67);
+  gone('#g2 > div', 36.48);
+  gsap.set('#g3 > div', { autoAlpha: 0 });
+  fade('#g3_0', 38.48);
+  fade('#g3_1', 45.62);
+  gone('#g3 > div', 46.86);
+  gsap.set('#g4 > div', { autoAlpha: 0 });
+  fade('#g4_0', 48.86);
+  fade('#g4_1', 50.29);
+  fade('#g4_2', 53.05);
+  gone('#g4 > div', 57.52);
+  gsap.set('#g5 > div', { autoAlpha: 0 });
+  fade('#g5_0', 58.19);
+  fade('#g5_1', 59.52);
+  tl.to('#g5_1 i:nth-child(1)', { opacity: 1, backgroundColor: '#F5B700', color: '#1C1C1C', borderColor: '#F5B700', duration: 0.4 }, 59.57);
+  tl.to('#g5_1 i:nth-child(2)', { opacity: 1, backgroundColor: '#F5B700', color: '#1C1C1C', borderColor: '#F5B700', duration: 0.4 }, 60.71);
+  tl.to('#g5_1 i:nth-child(3)', { opacity: 1, backgroundColor: '#F5B700', color: '#1C1C1C', borderColor: '#F5B700', duration: 0.4 }, 62.85);
+  tl.to('#g5_1 i:nth-child(4)', { opacity: 1, backgroundColor: '#F5B700', color: '#1C1C1C', borderColor: '#F5B700', duration: 0.4 }, 65.43);
+  gone('#g5 > div', 71.14);
+  gsap.set('#g6 > div', { autoAlpha: 0 });
+  fade('#g6_0', 71.81);
+  tl.fromTo('#g6_1', { autoAlpha: 0, scale: 1.35, rotation: -1 }, { autoAlpha: 1, scale: 1, rotation: -4, duration: 0.2, ease: 'power4.in' }, 77.9);
+  gone('#g6 > div', 79.14);
+  gsap.set('#g7 > div', { autoAlpha: 0 });
+  fade('#g7_0', 84.0);
+  fade('#g7_1', 86.86);
+  gone('#g7 > div', 88.57);
+  tl.to('#c0', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 0.03).to('#c0', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 3.24);
+  tl.to('#c1', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 3.52).to('#c1', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 5.57);
+  tl.to('#c2', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 6.1).to('#c2', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 8.66);
+  tl.to('#c3', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 9.05).to('#c3', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 11.66);
+  tl.to('#c4', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 12.43).to('#c4', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 17.38);
+  tl.to('#c5', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 17.81).to('#c5', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 20.71);
+  tl.to('#c6', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 21.14).to('#c6', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 24.81);
+  tl.to('#c7', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 25.52).to('#c7', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 28.71);
+  tl.to('#c8', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 29.1).to('#c8', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 33.09);
+  tl.to('#c9', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 33.48).to('#c9', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 36.09);
+  tl.to('#c10', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 36.81).to('#c10', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 41.09);
+  tl.to('#c11', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 41.43).to('#c11', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 44.050000000000004);
+  tl.to('#c12', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 44.33).to('#c12', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 46.24);
+  tl.to('#c13', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 47.14).to('#c13', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 51.470000000000006);
+  tl.to('#c14', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 51.76).to('#c14', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 55.0);
+  tl.to('#c15', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 55.24).to('#c15', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 57.09);
+  tl.to('#c16', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 57.81).to('#c16', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 62.14);
+  tl.to('#c17', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 62.57).to('#c17', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 66.43);
+  tl.to('#c18', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 66.76).to('#c18', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 70.71000000000001);
+  tl.to('#c19', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 71.52).to('#c19', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 76.71000000000001);
+  tl.to('#c20', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 77.05).to('#c20', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 78.81);
+  tl.to('#c21', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 79.48).to('#c21', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 81.85000000000001);
+  tl.to('#c22', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 82.19).to('#c22', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 86.52);
+  tl.to('#c23', { opacity: 0.88, duration: 0.3, ease: 'sine.out' }, 87.0).to('#c23', { opacity: 0, duration: 0.3, ease: 'sine.in' }, 89.0);
+  const upd = t => B.update(t);
+  window.addEventListener('hf-seek', e => upd(e.detail.time));
+  tl.eventCallback('onUpdate', () => upd(tl.time()));
+  upd(0);
+  window.__timelines = { short: tl };
+</script>
+</body>
+</html>

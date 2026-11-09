@@ -1,0 +1,109 @@
+{
+ "topic": "How BrahMos works",
+ "minutes": 6.0,
+ "wpm": 146,
+ "words": 876,
+ "chapters": [
+  {
+   "title": "Hook",
+   "shot": "room",
+   "words": 70,
+   "n": 1,
+   "seconds": 28.8,
+   "beats": 5
+  },
+  {
+   "title": "Open it",
+   "shot": "explode",
+   "words": 53,
+   "n": 2,
+   "seconds": 21.8,
+   "beats": 4
+  },
+  {
+   "title": "System 1",
+   "shot": "focus",
+   "words": 131,
+   "n": 3,
+   "seconds": 53.8,
+   "beats": 9
+  },
+  {
+   "title": "System 2",
+   "shot": "focus",
+   "words": 131,
+   "n": 4,
+   "seconds": 53.8,
+   "beats": 9
+  },
+  {
+   "title": "System 3",
+   "shot": "focus",
+   "words": 131,
+   "n": 5,
+   "seconds": 53.8,
+   "beats": 9
+  },
+  {
+   "title": "System 4",
+   "shot": "focus",
+   "words": 131,
+   "n": 6,
+   "seconds": 53.8,
+   "beats": 9
+  },
+  {
+   "title": "Dive",
+   "shot": "dive",
+   "words": 88,
+   "n": 7,
+   "seconds": 36.2,
+   "beats": 6
+  },
+  {
+   "title": "Connect",
+   "shot": "return",
+   "words": 88,
+   "n": 8,
+   "seconds": 36.2,
+   "beats": 6
+  },
+  {
+   "title": "Close",
+   "shot": "room",
+   "words": 53,
+   "n": 9,
+   "seconds": 21.8,
+   "beats": 4
+  }
+ ],
+ "enginex_calls": {
+  "voice_speak_whole_video": 1,
+  "voice_transcribe_whole_video": 1,
+  "uploads_create_url": 11,
+  "blender_preview": 9,
+  "blender_final": 9,
+  "review_montage": 9,
+  "review_sign_batched": 2,
+  "motion_graphic_render_silent": 9,
+  "concat_audio_replace_sprite_sign": 4,
+  "sound_voice_duck_patch_reserve": 6,
+  "retake_reserve_20pct": 13
+ },
+ "enginex_calls_total": 74,
+ "budget_cap": 500,
+ "voice": {
+  "voice": "owen",
+  "lineGapMs": 450,
+  "paragraphGapMs": 900,
+  "continuity": true,
+  "format": "wav"
+ },
+ "render": {
+  "res": [
+   1920,
+   1080
+  ],
+  "fps": 30
+ }
+}

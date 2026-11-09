@@ -1,0 +1,8 @@
+[a documentary narrator explaining to a friend, warm and clear, steady pace] Speed is only half the job, because hitting the right target at that speed is the work of the Guidance System.
+It can cruise as high as fifteen kilometres, where an inertial system keeps counting where it is. Satellite navigation corrects its small errors, just like the map on your phone.
+So why would a missile this fast fly so low? For the final stretch it drops down and skims the sea, only about ten metres above the waves.
+That's where the curve of the Earth helps, because a ship's radar can only see something that low from about thirty kilometres away.
+[pause]
+As it closes in, the Seeker wakes up, sends out its own radio waves, and locks on using the echo that comes back.
+In the last moments it can weave in an S shape or climb and dive steeply, which makes it much harder to stop.
+That's why it's called fire and forget. Once it's launched, the missile makes every decision on its own.

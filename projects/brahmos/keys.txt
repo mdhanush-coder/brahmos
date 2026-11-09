@@ -1,0 +1,2 @@
+glb=input/2026-11-09/e65b961c-7e57-47b5-a89e-ad00ba17887f.glb
+warship=input/2026-11-09/2695ab37-8cbd-4881-8b95-fcab2ec3c9d0.glb

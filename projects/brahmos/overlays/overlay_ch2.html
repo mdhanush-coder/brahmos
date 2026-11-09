@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* night-blaze/dark. Chapter 2 (Open it), 34.02 s, plate TRANSPARENT (ch2_job.py) over bg_layer.html.
+     The missile renders right of centre (camera shift); every word lives in the left column x 136-756 (< 40 % of the frame,
+     the gate in ch2_job.py checks the missile stays right of 40 %). Data colours that label the real thing (cyan air in
+     the ramjet) are the one documented exception to the palette. */
+  :root { --night:#111E26; --blaze:#F74304; --lime:#DAFF01; --lime35:rgba(218,255,1,0.35); --nightA:rgba(17,30,38,0.82); --cyan:#00BFFF; }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--night); color:var(--lime);
+          font-family:'Rajdhani','Hind',sans-serif; }
+  .note { position:absolute; left:136px; top:72px; font:500 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.12em; opacity:0.7; }
+  /* rivers -> name */
+  #rivers { position:absolute; left:136px; top:170px; width:620px; }
+  #rivers svg { width:620px; height:330px; display:block; overflow:visible; }
+  #rivers .lab { position:absolute; left:0; font:600 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.08em; }
+  #labA { top:0; } #labB { top:300px; }
+  #name { position:absolute; left:136px; top:560px; font:900 110px/1 'Unbounded','Hind',sans-serif; letter-spacing:0.01em; white-space:nowrap; }
+  #name .b { color:var(--blaze); }
+  #year { position:absolute; left:136px; top:740px; display:flex; flex-direction:column; gap:30px; }
+  #year .big { font:900 96px/1 'Unbounded','Hind',sans-serif; margin-left:-4px; }
+  #year .cap { font:600 48px/1.1 'Rajdhani','Hind',sans-serif; }
+  /* size cards */
+  #size { position:absolute; left:136px; top:200px; display:flex; flex-direction:column; gap:48px; }
+  #size .row { display:flex; flex-direction:column; gap:24px; }
+  #size .big { font:900 112px/1 'Unbounded','Hind',sans-serif; margin-left:-4px; }
+  #size .big.hl { color:var(--blaze); }
+  #size .cap { font:600 48px/1.1 'Rajdhani','Hind',sans-serif; }
+  /* parts list */
+  #parts { position:absolute; left:136px; top:150px; display:flex; flex-direction:column; gap:36px; }
+  #parts .head { font:600 30px 'JetBrains Mono','Hind',monospace; letter-spacing:0.12em; opacity:0.85; }
+  #parts .row { display:flex; align-items:center; gap:28px; }
+  #parts .dot { width:30px; height:30px; border-radius:50%; flex:none; }
+  #parts .txt { display:flex; flex-direction:column; gap:6px; }
+  #parts .t { font:700 60px/1 'Rajdhani','Hind',sans-serif; letter-spacing:0.02em; }
+  #parts .s { font:500 34px/1.1 'Rajdhani','Hind',sans-serif; opacity:0.85; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch2" data-start="0" data-duration="34.02" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="note" id="note">3D ILLUSTRATION</div>
+  <div id="rivers">
+    <div class="lab" id="labA">BRAHMAPUTRA · INDIA</div>
+    <svg viewBox="0 0 620 330">
+      <path id="rA" d="M0 60 C 120 30, 200 110, 320 80 S 520 120, 600 165" fill="none" stroke="#DAFF01" stroke-width="10" stroke-linecap="round"/>
+      <path id="rB" d="M0 270 C 120 300, 200 220, 320 250 S 520 210, 600 165" fill="none" stroke="#DAFF01" stroke-width="10" stroke-linecap="round" stroke-opacity="0.75"/>
+      <circle id="meet" cx="600" cy="165" r="16" fill="#F74304"/>
+    </svg>
+    <div class="lab" id="labB">MOSKVA · RUSSIA</div>
+  </div>
+  <div id="name">BRAH<span class="b">MOS</span></div>
+  <div id="year"><div class="big">1998</div><div class="cap">India and Russia agree to build it</div></div>
+  <div id="size">
+    <div class="row" id="sLen"><div class="big">8.4 M</div><div class="cap">long</div></div>
+    <div class="row" id="sKg"><div class="big">3,000 KG</div><div class="cap">at launch</div></div>
+    <div class="row" id="sBus"><div class="big hl">≈ A CITY BUS</div></div>
+  </div>
+  <div id="parts">
+    <div class="head" id="pHead">5 SECTIONS · ILLUSTRATIVE</div>
+    <div class="row" id="p1"><div class="dot" style="background:var(--lime)"></div><div class="txt"><div class="t">SEEKER</div><div class="s">its eye</div></div></div>
+    <div class="row" id="p2"><div class="dot" style="background:var(--lime)"></div><div class="txt"><div class="t">GUIDANCE SYSTEM</div><div class="s">its brain</div></div></div>
+    <div class="row" id="p3"><div class="dot" style="background:var(--blaze)"></div><div class="txt"><div class="t">WARHEAD</div></div></div>
+    <div class="row" id="p4"><div class="dot" style="background:var(--cyan)"></div><div class="txt"><div class="t">RAMJET ENGINE</div><div class="s">keeps it fast</div></div></div>
+    <div class="row" id="p5"><div class="dot" style="background:var(--blaze)"></div><div class="txt"><div class="t">BOOSTER</div><div class="s">lifts it off</div></div></div>
+  </div>
+</div>
+<script>
+  // Every element lands ON its spoken word (chapter 2 local times = absolute - 45.877).
+  // ONE entrance per role (rise 24 px, 0.5 s, power3.out), exits 0.4 s; the river lines DRAW (acting on the idea).
+  const tl = gsap.timeline({ paused: true });
+  const IN = { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' };
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, IN, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  gsap.set(['#note', '#rivers', '#labA', '#labB', '#meet', '#name', '#year', '#size', '#sLen', '#sKg', '#sBus', '#parts',
+            '#pHead', '#p1', '#p2', '#p3', '#p4', '#p5'], { autoAlpha: 0 });
+  tl.to('#note', { autoAlpha: 0.7, duration: 0.6, ease: 'power2.out' }, 0.2);
+  for (const id of ['rA', 'rB']) {
+    const p = document.getElementById(id), L = p.getTotalLength();
+    p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+  }
+  tl.set('#rivers', { autoAlpha: 1 }, 0.84);                                       // "नदियों" 0.84
+  inn('#labA', 2.76); tl.to('#rA', { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' }, 2.76);   // "ब्रह्मपुत्र"
+  inn('#labB', 4.48); tl.to('#rB', { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, 4.48);   // "मॉस्कोवा"
+  tl.fromTo('#meet', { autoAlpha: 0, scale: 0.4, transformOrigin: '50% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power3.out' }, 5.6);
+  inn('#name', 5.6);                                                               // the rivers meet: the name
+  inn('#year', 6.6);                                                               // "अट्ठानवे" 6.6
+  out(['#rivers', '#name', '#year'], 10.4);
+  tl.set('#size', { autoAlpha: 1 }, 11.0);
+  inn('#sLen', 11.32);                                                             // "आठ मीटर" 11.32
+  inn('#sKg', 13.2);                                                               // "तीन हज़ार" 13.2
+  inn('#sBus', 15.9);                                                              // "सिटी बस" 15.9
+  out('#size', 17.5);
+  tl.set('#parts', { autoAlpha: 1 }, 18.0);
+  inn('#pHead', 18.62);                                                            // "पाँच हिस्से" 18.62
+  inn('#p1', 20.94);  inn('#p2', 23.14);  inn('#p3', 26.2);  inn('#p4', 28.03);  inn('#p5', 31.41);
+  window.__timelines = { ch2: tl };
+</script>
+</body>
+</html>

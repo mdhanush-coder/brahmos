@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* ch2 "What is Temple": the ch1 turntable plate again on the right (the device being named), every word in the left column.
+     charcoal-gold/dark, GOLD ONLY on the one word per frame (Temple, then $25M, then "your brain").
+     Video sizes: display >= 72 px, lines read for meaning >= 48 px, labels >= 30 px. */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .note { position:absolute; left:136px; top:96px; font:italic 500 30px 'Space Grotesk','Hind',sans-serif; opacity:0.75; }
+  .lab { font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; opacity:0.7; }
+  .big { font:700 128px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.02em; }
+  .gold { color:var(--gold); }
+  .line { font:600 56px/1.15 'Space Grotesk','Hind',sans-serif; text-wrap:balance; }
+  .blk { position:absolute; left:136px; width:600px; display:flex; flex-direction:column; gap:18px; }
+  #name { top:190px; }
+  #maker { top:430px; }
+  #m1 { top:190px; }
+  #m2 { top:470px; }
+  #m2 .big { font-size:96px; }
+  .chip { position:absolute; left:136px; padding:16px 28px; border-radius:14px; background:rgba(28,28,28,0.86); border:2px solid var(--edge);
+          font:600 48px/1.25 'Space Grotesk','Hind',sans-serif; }
+  #ceo { bottom:150px; }
+  #promise { top:190px; gap:28px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch2" data-start="0" data-duration="24.24" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="note" id="note">3D illustration</div>
+  <div class="blk" id="name"><div class="lab">ITS NAME</div><div class="big gold">Temple</div></div>
+  <div class="blk" id="maker"><div class="lab">MADE BY</div><div class="line">Deepinder Goyal</div><div class="lab">FOUNDER OF ZOMATO</div></div>
+  <div class="blk" id="m1"><div class="big gold">$25M</div><div class="lab">OF HIS OWN MONEY</div></div>
+  <div class="blk" id="m2"><div class="big">+$54M</div><div class="lab">MORE RAISED</div></div>
+  <div class="chip" id="ceo">Stepped down as<br>CEO of Eternal</div>
+  <div class="blk" id="promise"><div class="lab">THE PROMISE</div>
+    <div class="line">A wearable that estimates, live, all day, how much blood reaches <span class="gold">your brain</span></div></div>
+</div>
+<script>
+  // Chapter-relative word times (words_raghav_v2.json; ch2 starts at 24.28 s of the master). ONE entrance for every block:
+  // rise 24 px, 0.5 s, power3.out; exits 0.4 s. The device turns on its own (plate); no other motion while words are read.
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(['#note', '#name', '#maker', '#m1', '#m2', '#ceo', '#promise'], { autoAlpha: 0 });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  tl.to('#note', { autoAlpha: 0.75, duration: 0.6 }, 0.2);
+  inn('#name', 0.75);                                     // "टेम्पल" (0.80)
+  inn('#maker', 3.0);                                     // "ज़ोमैटो के फाउंडर दीपिंदर गोयल" (3.00)
+  out(['#name', '#maker'], 5.9);
+  inn('#m1', 7.15);                                       // "पच्चीस मिलियन डॉलर" (7.19)
+  inn('#m2', 9.75);                                       // "चौवन मिलियन" (9.79)
+  inn('#ceo', 13.75);                                     // "इटरनल के सी ई ओ ... छोड़ दिया" (13.77)
+  out(['#m1', '#m2', '#ceo'], 16.2);
+  inn('#promise', 17.05);                                 // "और वादा क्या है? एक ऐसा वियरेबल" (17.06)
+  out(['#promise', '#note'], 23.75);
+  window.__timelines = { ch2: tl };
+</script>
+</body>
+</html>

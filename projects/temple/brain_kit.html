@@ -1,0 +1,131 @@
+<script>
+/* BrainKit: an illustrated brain for the Motion Graphic pages (user, 2026-11-07: "draw a sketch of a brain ... the signal
+   should go red, green, blue ... the brain should be like pumping"). Lateral view, frontal lobe on the left.
+   Everything is a function of the timeline time (update(t)), never a clock, so every render is identical.
+   const B = BrainKit('#host', { heart:true, device:true });  B.drawOn(tl, t, dur);  B.flow(t0, t1, opts);  B.update(t)
+   flow opts: period (s, one heartbeat), colors, reach(t) -> 0..1 (how much of each pulse gets to the brain; <1 = less blood). */
+function BrainKit(sel, o) {
+  o = Object.assign({ heart: false, device: false }, o || {});
+  const NS = 'http://www.w3.org/2000/svg', H = o.heart ? 980 : 600;
+  const host = document.querySelector(sel);
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 640 ${H}`); svg.style.width = '100%'; svg.style.height = '100%'; svg.style.overflow = 'visible';
+  host.appendChild(svg);
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; };
+  const defs = el('defs', {});
+  defs.innerHTML = `<radialGradient id="bkGlow" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <filter id="bkSoft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="bkBloom" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+  const CREAM = '#FFF8E6';
+  // ---- the brain (group that pumps) ----
+  const brain = el('g', { id: 'bkBrain' });
+  const glow = el('ellipse', { cx: 320, cy: 210, rx: 300, ry: 220, fill: 'url(#bkGlow)', opacity: 0 }, brain);
+  const tint = el('path', { d: '', fill: '#F0412E', opacity: 0 }, brain);
+  const OUT = 'M60,250 C40,170 90,80 190,55 C260,30 340,28 410,45 C500,65 565,120 580,200 C592,260 575,300 545,320 C520,338 490,340 470,335 C455,360 420,372 390,365 C370,362 350,350 340,338 C300,345 250,345 215,335 C180,345 140,340 110,320 C80,302 64,280 60,250 Z';
+  tint.setAttribute('d', OUT);
+  const ink = [];
+  const line = (d, w, op) => { const p = el('path', { d, fill: 'none', stroke: CREAM, 'stroke-width': w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: op }, brain); ink.push(p); return p; };
+  line(OUT, 4, 1);
+  line('M470,335 C500,340 540,350 545,380 C548,410 515,425 480,420 C450,416 430,400 425,382 C423,368 440,352 470,335 Z', 3.5, 1);   // cerebellum
+  line('M385,362 C392,400 396,440 392,486 M345,345 C350,400 352,440 355,486', 3.5, 1);                                                // brainstem
+  line('M150,290 C210,265 270,250 330,245 C360,243 380,232 395,215', 3, 0.9);                                                           // lateral fissure
+  line('M330,48 C320,90 335,130 320,170 C310,200 318,225 310,250', 3, 0.9);                                                            // central sulcus
+  for (const d of ['M120,120 C150,105 170,130 200,115 S250,100 270,125', 'M100,190 C130,170 160,200 190,180 S240,160 270,185',
+                   'M150,80 C175,70 190,92 215,80', 'M380,80 C400,110 430,95 450,125 S480,150 500,140', 'M370,150 C400,170 420,150 445,180 S490,200 520,190',
+                   'M420,240 C450,225 480,250 510,235 S545,240 560,255', 'M200,300 C230,285 260,305 290,290', 'M90,250 C110,235 130,260 150,245',
+                   'M230,215 C250,200 270,222 290,210', 'M455,60 C480,80 470,100 500,110', 'M520,140 C540,160 530,180 555,200'])
+    line(d, 2.4, 0.55);                                                                                                                  // gyri
+  for (const d of ['M440,375 C470,365 510,370 540,380', 'M445,395 C475,388 505,392 535,400', 'M455,410 C480,405 505,408 525,414'])
+    line(d, 2, 0.55);                                                                                                                    // cerebellar folia
+  // ---- arteries: a trunk up the neck into the base of the brain, four branches over the surface ----
+  const trunkD = o.heart ? 'M300,860 C296,760 304,640 300,520 C298,440 302,380 300,330' : 'M300,600 C300,500 305,400 300,330';
+  const vessels = [trunkD, 'M300,330 C270,280 220,220 150,160', 'M300,330 C320,260 360,180 400,110', 'M300,330 C360,300 450,260 530,220', 'M300,330 C250,320 180,300 110,260']
+    .map((d, i) => el('path', { d, fill: 'none', stroke: '#F0412E', 'stroke-width': i ? 5 : 9, 'stroke-linecap': 'round', opacity: 0.55 }, i ? brain : svg));
+  vessels.forEach(v => ink.push(v));
+  // ---- scalp artery (orange): runs under the device, up the side of the head (only with the device) ----
+  const scalp = o.device ? el('path', { d: 'M52,430 C30,370 22,300 26,240 C30,180 52,112 112,62', fill: 'none', stroke: '#FF7A2F',
+                                        'stroke-width': 6, 'stroke-linecap': 'round', opacity: 0, filter: 'url(#bkBloom)' }) : null;
+  const LS = scalp ? scalp.getTotalLength() : 1;
+  // ---- heart (optional) ----
+  let heart = null;
+  if (o.heart) {
+    heart = el('g', {});
+    el('path', { d: 'M300,955 C210,890 190,830 235,805 C265,790 292,805 300,825 C308,805 335,790 365,805 C410,830 390,890 300,955 Z',
+                 fill: 'rgba(240,65,46,0.18)', stroke: '#F0412E', 'stroke-width': 4, 'stroke-linejoin': 'round' }, heart);
+    heart.style.transformOrigin = '300px 870px'; heart.style.transformBox = 'view-box';
+  }
+  // ---- Temple device (optional): a head outline around the brain, the gold device ON the skin at the temple, and its light
+  //      entering the skull as a coloured beam that ends inside the brain ----
+  let dev = null, beam = null, beamPath = null, headEl = null, bst = [];
+  if (o.device) {
+    headEl = el('path', { d: 'M42,255 C14,170 70,60 185,30 C262,6 345,2 415,20 C520,42 592,105 606,198 C618,265 600,320 566,345 C548,372 505,392 492,420 L488,600 M42,255 C44,282 46,296 40,318 C24,330 6,346 4,356 C16,364 30,370 38,372 C28,384 26,394 32,402 C24,412 28,432 48,442 C70,462 110,476 170,484 C230,490 262,494 268,520 L268,600',
+      fill: 'none', stroke: CREAM, 'stroke-width': 3.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: 0.9 });
+    svg.insertBefore(headEl, brain);
+    ink.push(headEl);
+    const grad = el('linearGradient', { id: 'bkBeam', x1: 0, y1: 0, x2: 1, y2: 0 }, defs);
+    bst = [el('stop', { offset: 0, 'stop-color': '#F0412E', 'stop-opacity': 0.95 }, grad), el('stop', { offset: 1, 'stop-color': '#F0412E', 'stop-opacity': 0.06 }, grad)];
+    beamPath = el('path', { d: 'M46,236 C120,232 200,236 272,248', fill: 'none', stroke: 'none' });
+    beam = el('path', { d: 'M46,226 L300,150 L300,350 L46,246 Z', fill: 'url(#bkBeam)', opacity: 0 });
+    dev = el('ellipse', { cx: 31, cy: 236, rx: 15, ry: 34, fill: '#F5B700', stroke: '#FFE29A', 'stroke-width': 2 });
+  }
+  const LB = beamPath ? beamPath.getTotalLength() : 1;
+  // ---- signal pulses: a pool of glowing dots (head + 2 tail dots) ----
+  const pool = [];
+  for (let i = 0; i < 40; i++) pool.push([0, 1, 2].map(k => el('circle', { r: [8, 5.5, 3.5][k], fill: '#fff', opacity: 0, filter: 'url(#bkBloom)' })));
+  brain.style.transformOrigin = '320px 220px'; brain.style.transformBox = 'view-box';
+  const L = vessels.map(v => v.getTotalLength());
+  const flows = [];
+  const api = {
+    svg, brain, heart, dev, ink, vessels, scalp, beam, headEl,
+    flowScalp(t0, t1, f) { flows.push(Object.assign({ t0, t1, period: 0.9, colors: ['#FF7A2F'], reach: () => 1, up: 0.6, out: 0.0, scalp: true }, f)); },
+    drawOn(tl, t, dur) {   // the sketch draws itself, outline first, then folds, then vessels
+      ink.forEach((p, i) => { const len = p.getTotalLength(); gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+        tl.to(p, { strokeDashoffset: 0, duration: dur * 0.6, ease: 'power2.inOut' }, t + dur * 0.4 * (i / ink.length)); });
+    },
+    flow(t0, t1, f) { flows.push(Object.assign({ t0, t1, period: 0.86, colors: ['#F0412E', '#2BD45A', '#3A7BFF'], reach: () => 1, up: 0.55, out: 0.45 }, f)); },
+    update(t) {
+      let used = 0, flash = 0, flashCol = null, beat = 0, bflash = 0, bcol = null;
+      for (const f of flows) {
+        if (t < f.t0 - 0.01 || t > f.t1 + f.up + f.out + 0.6) continue;
+        const n = Math.floor((Math.min(t, f.t1) - f.t0) / f.period);
+        for (let k = Math.max(0, n - 2); k <= n; k++) {
+          const te = f.t0 + k * f.period; if (te > f.t1) break;
+          const age = t - te; if (age < 0) continue;
+          beat = Math.max(beat, Math.exp(-age / 0.18));
+          if (f.beam && beam && !f.scalp) { const bf = Math.exp(-age / 0.9); if (bf > bflash) { bflash = bf; bcol = f.colors[k % f.colors.length]; } }
+          const col = f.colors[k % f.colors.length], reach = f.reach(te);
+          if (f.scalp) {   // a lit dot rides the scalp artery from the neck up past the device; no brain flash
+            const u = age / (f.up + 0.5);
+            if (u <= 1 && scalp && used < pool.length) {
+              const dots = pool[used++];
+              dots.forEach((d, j) => { const p = scalp.getPointAtLength(Math.max(0, u - j * 0.05) * LS);
+                d.setAttribute('cx', p.x); d.setAttribute('cy', p.y); d.setAttribute('fill', col); d.setAttribute('opacity', (1 - j * 0.3)); });
+            }
+            continue;
+          }
+          // trunk, then all four branches at once
+          const parts = age < f.up ? [[0, age / f.up]] : [1, 2, 3, 4].map(b => [b, (age - f.up) / f.out]);
+          for (const [vi, u] of parts) {
+            if (u > 1 || used >= pool.length) continue;
+            const fade = vi === 0 ? 1 : Math.max(0, Math.min(1, (reach - u) / 0.15 + 1)) * (reach > 0 ? 1 : 0);
+            const dots = pool[used++];
+            dots.forEach((d, j) => { const uu = Math.max(0, u - j * 0.035), bm = f.beam && vi === 0, p = (bm ? beamPath : vessels[vi]).getPointAtLength(uu * (bm ? LB : L[vi]));
+              d.setAttribute('cx', p.x); d.setAttribute('cy', p.y); d.setAttribute('fill', col);
+              d.setAttribute('opacity', (1 - j * 0.3) * fade * (vi === 0 && u < 0.05 ? u / 0.05 : 1)); });
+          }
+          const ta = te + f.up + f.out;   // the pulse lands: the brain lights in its colour
+          if (t >= ta) { const v = Math.exp(-(t - ta) / 0.4) * reach; if (v > flash) { flash = v; flashCol = col; } }
+        }
+      }
+      for (let i = used; i < pool.length; i++) pool[i].forEach(d => d.setAttribute('opacity', 0));
+      if (beam) { beam.setAttribute("opacity", 0.85 * bflash); if (bcol) bst.forEach(st => st.setAttribute('stop-color', bcol)); }
+      glow.setAttribute('opacity', 0.10 + 0.30 * flash);
+      tint.setAttribute('opacity', 0.28 * flash);
+      if (flashCol) tint.setAttribute('fill', flashCol);
+      brain.style.transform = `scale(${1 + 0.03 * flash})`;           // the brain "pumps" as each pulse arrives
+      if (heart) heart.style.transform = `scale(${1 + 0.08 * beat})`;  // the heart beats as each pulse leaves
+    },
+  };
+  return api;
+}
+</script>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* charcoal-gold/dark: charcoal ground, cream words, GOLD ONLY on the one word or number that matters in each frame.
+     Typography (video sizes, Motion Director): display >= 72 px, lines read for meaning >= 48 px, labels >= 30 px.
+     LAYOUT: the 3D plate sits right of centre (build_pages.py); every word lives in the left column (x 136 to ~700). */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .note { position:absolute; left:136px; top:96px; font:italic 500 30px 'Space Grotesk','Hind',sans-serif; opacity:0.75; }
+  #price { position:absolute; left:136px; top:190px; display:flex; flex-direction:column; gap:32px; }
+  #price .num { font:700 128px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); letter-spacing:-0.02em; }
+  #price .cap { font:600 30px/1.3 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; opacity:0.85; }
+  .chip { position:absolute; left:136px; padding:18px 30px; border-radius:14px; background:rgba(28,28,28,0.86);
+          border:2px solid var(--edge); font:600 36px/1.25 'Space Grotesk','Hind',sans-serif; }
+  #where { bottom:150px; font-size:48px; }
+  #date { top:190px; letter-spacing:0.04em; }
+  #crash { top:348px; background:var(--gold); color:var(--dark); border-color:var(--gold); font-weight:700; letter-spacing:0.06em; }
+  #doctors { position:absolute; left:136px; top:520px; display:flex; flex-direction:column; align-items:flex-start; gap:56px; }
+  #doctors .lbl { font:600 40px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; }
+  #doctors .stamp { padding:6px 34px; border:8px solid var(--gold); border-radius:16px; font:700 120px/1.05 'Space Grotesk','Hind',sans-serif;
+                    color:var(--gold); transform:rotate(-7deg); transform-origin:20% 50%; }
+  #who { position:absolute; left:136px; bottom:150px; font:700 104px/1 'Space Grotesk','Hind',sans-serif; }
+  #who span { color:var(--gold); }
+</style>
+
+<style>
+  /* Designed background (Charcoal Gold): warm charcoal radial base, a breathing gold glow where the device sits, a faint
+     dot grid fading to the edges, drifting dust, a vignette. The 3D plate (transparent, shadow kept) sits on top of it. */
+  /* Color Palette rule: no colour outside the palette but the palette's own at lower opacity: charcoal ground, the gold
+     glow at <= 16 %, cream grid and dust at low opacity. (The first version faded to black: not a palette colour.) */
+  #bg { position:absolute; inset:0; overflow:hidden; background:#1C1C1C; }
+  #glow { position:absolute; left:calc(50% + 300px); top:52%; width:1100px; height:760px; margin:-380px 0 0 -550px; border-radius:50%;
+          background:radial-gradient(closest-side, rgba(245,183,0,0.16), rgba(245,183,0,0.05) 55%, rgba(245,183,0,0) 100%); }
+  #grid { position:absolute; inset:-40px; opacity:0.10;
+          background-image:radial-gradient(circle, #FFF8E6 1.4px, transparent 1.6px); background-size:36px 36px;
+          -webkit-mask-image:radial-gradient(ellipse 60% 60% at 50% 50%, #000 0%, transparent 100%);
+                  mask-image:radial-gradient(ellipse 60% 60% at 50% 50%, #000 0%, transparent 100%); }
+  #dust { position:absolute; inset:0; }
+  #vig { position:absolute; inset:0; background:radial-gradient(ellipse 80% 80% at 60% 52%, rgba(245,183,0,0.05) 0%, rgba(245,183,0,0) 70%); }
+  /* the device sits right of centre so the words in the left column never cover it (keepout_check.py uses these numbers) */
+  #plate { position:absolute; inset:0; width:1920px; height:1080px; object-fit:cover; transform:translateX(300px) scale(0.78);
+           transform-origin:50% 50%; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch1" data-start="0" data-duration="24.64" data-width="1920" data-height="1080">
+  
+<div id="bg"><div id="glow"></div><div id="grid"></div><canvas id="dust" width="1920" height="1080"></canvas><div id="vig"></div></div>
+
+  <div class="note" id="note">3D illustration</div>
+  <div id="price"><div class="num" id="num">₹0</div><div class="cap" id="cap">PRICE, INCL. LIFETIME<br>SUBSCRIPTION</div></div>
+  <div class="chip" id="where">Worn on the temple,<br>beside the eye</div>
+  <div class="chip" id="date">1 NOV 2026<br>PRE-ORDERS OPEN</div>
+  <div class="chip" id="crash">WEBSITE CRASHED</div>
+  <div id="doctors"><div class="lbl" id="dlbl">DOCTORS:</div><div class="stamp" id="stamp">TOY?</div></div>
+  <div id="who">WHO'S<br><span>RIGHT?</span></div>
+</div>
+
+<script>
+  (function () {
+    // dust: 70 seeded motes drifting up and sideways, drawn from the seek time only (never a clock)
+    const g = document.getElementById('dust').getContext('2d');
+    const motes = Array.from({ length: 70 }, () => ({ x: Math.random() * 1920, y: Math.random() * 1080, r: 0.8 + Math.random() * 2.2,
+      vx: (Math.random() - 0.5) * 10, vy: -4 - Math.random() * 10, a: 0.10 + Math.random() * 0.25, ph: Math.random() * 6.28 }));
+    function draw(t) {
+      g.clearRect(0, 0, 1920, 1080);
+      for (const m of motes) {
+        const x = ((m.x + m.vx * t) % 1920 + 1920) % 1920, y = ((m.y + m.vy * t) % 1080 + 1080) % 1080;
+        g.globalAlpha = m.a * (0.75 + 0.25 * Math.sin(m.ph + t * 0.8));
+        g.fillStyle = '#FFF8E6';
+        g.beginPath(); g.arc(x, y, m.r, 0, Math.PI * 2); g.fill();
+      }
+    }
+    window.addEventListener('hf-seek', (e) => draw(e.detail.time));
+    draw(0);
+  })();
+  window.__bgTween = function (tl, dur) {
+    // the glow breathes, the grid drifts: slow, so the background never competes with the device or the words
+    // under 5 % scale: the motion check flags a no-word element scaling 5 % while words are read (choreography.competing)
+    tl.fromTo('#glow', { scale: 0.98, opacity: 0.85 }, { scale: 1.02, opacity: 1, duration: dur / 2, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 0);
+    tl.fromTo('#grid', { x: 0, y: 0 }, { x: -36, y: -18, duration: dur, ease: 'none' }, 0);
+  };
+</script>
+<script>
+  // Every element lands ON its spoken word (words_raghav.json). ONE entrance for every block (rise 24 px, 0.5 s, power3.out),
+  // exits 0.4 s; the only exceptions act ON the words: the counter, the crash glitch, the stamp slam (kinetic-type.md).
+  const tl = gsap.timeline({ paused: true });
+  const fmt = v => '₹' + Math.round(v).toLocaleString('en-IN');     // escaped: never depends on the page encoding
+  const c = { v: 0 };
+  const IN = { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' };
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, IN, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  gsap.set(['#note', '#price', '#where', '#date', '#crash', '#doctors', '#who'], { autoAlpha: 0 });
+  tl.to('#note', { autoAlpha: 0.75, duration: 0.6, ease: 'power2.out' }, 0.2);
+  inn('#price', 0.0);                                                         // "पचासी हज़ार रुपये" (0.03-1.07)
+  tl.to(c, { v: 85000, duration: 1.05, ease: 'power2.out', onUpdate: () => { document.getElementById('num').textContent = fmt(c.v); } }, 0.03);
+  out('#price', 7.2);
+  inn('#where', 2.0);  out('#where', 7.9);                                    // "छोटा सा डिवाइस" (2.05) until the line ends (7.83)
+  inn('#date', 8.6);                                                          // "एक नवंबर" (8.45)
+  tl.set('#crash', { autoAlpha: 1 }, 12.3)                                    // "क्रैश" (12.31): glitch, 2 dips (< 3 flashes a second)
+    .fromTo('#crash', { x: 0 }, { keyframes: [{ x: -14, duration: 0.05 }, { x: 10, duration: 0.05 }, { x: -6, duration: 0.05 }, { x: 4, duration: 0.05 }, { x: 0, duration: 0.05 }] }, 12.3);
+  // (no opacity flicker: motion-check read the dips as the words leaving before they were read, reading.hold-short)
+  out(['#date', '#crash'], 14.6);
+  tl.set('#doctors', { autoAlpha: 1 }, 15.6);                                 // "डॉक्टर" (15.68): the label rises in
+  tl.fromTo('#dlbl', { autoAlpha: 0, y: 24 }, IN, 15.6);
+  tl.set('#stamp', { autoAlpha: 0 }, 15.6)                                    // "खिलौना" (16.98): the TOY? stamp slams on the word
+    .fromTo('#stamp', { autoAlpha: 0, scale: 1.45, rotation: -2 }, { autoAlpha: 1, scale: 1, rotation: -7, duration: 0.18, ease: 'power4.in' }, 16.95)
+    .to('#stamp', { keyframes: [{ x: 6, duration: 0.04 }, { x: -4, duration: 0.04 }, { x: 0, duration: 0.05 }] }, 17.13);
+  out('#doctors', 18.7);
+  inn('#who', 19.05);  out('#who', 23.7);                                     // "तो सही कौन है?" (19.08)
+  out('#note', 24.1);
+  if (window.__bgTween) window.__bgTween(tl, 24.64);
+  window.__timelines = { ch1: tl };
+</script>
+</body>
+</html>

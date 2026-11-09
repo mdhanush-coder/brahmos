@@ -1,0 +1,86 @@
+{
+ "chapters": [
+  {
+   "chapter": 1,
+   "title": "Hook",
+   "shot": "sea",
+   "parts": []
+  },
+  {
+   "chapter": 2,
+   "title": "Open it",
+   "shot": "explode",
+   "parts": [
+    "booster",
+    "guidance_system",
+    "ramjet_engine",
+    "seeker",
+    "warhead"
+   ]
+  },
+  {
+   "chapter": 3,
+   "title": "Launch",
+   "shot": "launch",
+   "parts": [
+    "booster",
+    "canister"
+   ]
+  },
+  {
+   "chapter": 4,
+   "title": "Ramjet",
+   "shot": "focus",
+   "parts": [
+    "intake_cone",
+    "nozzle",
+    "ramjet_engine"
+   ]
+  },
+  {
+   "chapter": 5,
+   "title": "Guidance",
+   "shot": "focus",
+   "parts": [
+    "guidance_system",
+    "seeker"
+   ]
+  },
+  {
+   "chapter": 6,
+   "title": "Speed is the weapon",
+   "shot": "dive",
+   "parts": [
+    "warhead"
+   ]
+  },
+  {
+   "chapter": 7,
+   "title": "From everywhere",
+   "shot": "return",
+   "parts": []
+  },
+  {
+   "chapter": 8,
+   "title": "Made in India",
+   "shot": "return",
+   "parts": []
+  },
+  {
+   "chapter": 9,
+   "title": "Close",
+   "shot": "sea",
+   "parts": []
+  }
+ ],
+ "parts": [
+  "Booster",
+  "Canister",
+  "Guidance System",
+  "Intake Cone",
+  "Nozzle",
+  "Ramjet Engine",
+  "Seeker",
+  "Warhead"
+ ]
+}

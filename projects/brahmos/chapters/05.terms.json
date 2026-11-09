@@ -1,0 +1,24 @@
+{
+ "guidance system": {
+  "part": "guidance_system",
+  "shot": "focus",
+  "after": "of the"
+ },
+ "it can": {
+  "number": "15 km"
+ },
+ "so why": {
+  "number": "\u224810 m"
+ },
+ "that's where": {
+  "number": "\u224830 km"
+ },
+ "seeker": {
+  "part": "seeker",
+  "shot": "focus",
+  "after": "in the"
+ },
+ "that's why": {
+  "chip": "FIRE AND FORGET"
+ }
+}

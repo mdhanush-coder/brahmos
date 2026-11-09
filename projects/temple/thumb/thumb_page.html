@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:#101418; font-family:'Space Grotesk','Hind',sans-serif; }
+  #bg { position:absolute; inset:0; width:1920px; height:1080px; object-fit:cover; }
+  /* a dark gradient from the left so the words read on any phone */
+  #shade { position:absolute; inset:0; background:linear-gradient(90deg, rgba(8,10,14,0.88) 0%, rgba(8,10,14,0.62) 38%, rgba(8,10,14,0) 62%); }
+  .pill { position:absolute; left:90px; top:70px; padding:14px 30px; border-radius:40px; background:#F5B700; color:#101418;
+          font:700 44px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; }
+  #price { position:absolute; left:80px; top:178px; font:800 292px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.03em; color:#F5B700;
+           text-shadow:0 10px 0 #7a4f00, 0 0 60px rgba(245,183,0,0.55), 0 18px 40px rgba(0,0,0,0.8); -webkit-text-stroke:6px #101418; paint-order:stroke fill; }
+  #hook { position:absolute; left:90px; top:520px; font:800 190px/0.98 'Space Grotesk','Hind',sans-serif; color:#fff; letter-spacing:-0.02em;
+          text-shadow:0 8px 0 rgba(0,0,0,0.65), 0 18px 40px rgba(0,0,0,0.8); -webkit-text-stroke:5px #101418; paint-order:stroke fill; }
+  #hook .toy { color:#FF3B30; }  #hook .gen { color:#2BD45A; }  #hook .or { font-size:90px; color:#fff; letter-spacing:0.02em; }
+  #q { position:absolute; left:92px; top:880px; font:700 66px/1.1 'Space Grotesk','Hind',sans-serif; color:#fff; letter-spacing:0.01em;
+       text-shadow:0 6px 24px rgba(0,0,0,0.9); }
+  #q span { color:#F5B700; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="thumb" data-start="0" data-duration="1" data-width="1920" data-height="1080">
+  <img id="bg" src="assets/01-Deepsoch_00001_.png">
+  <div id="shade"></div>
+  <div class="pill">BRAIN WEARABLE</div>
+  <div id="price">₹85,000</div>
+  <div id="hook"><span class="toy">TOY</span> <span class="or">or</span><br><span class="gen">GENIUS?</span></div>
+  <div id="q">Doctors are <span>not convinced</span></div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  tl.to('#root', { opacity: 1, duration: 0.01 }, 0);
+  window.__timelines = { thumb: tl };
+</script>
+</body>
+</html>

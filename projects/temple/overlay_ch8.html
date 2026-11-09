@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* ch8 "The gravity theory": no 3D. Left column = the theory as a 3-step chain, then the doctors' verdict and Goyal's reply.
+     Right = the illustrated brain and heart (BrainKit): red pulses climb to the brain, gravity pulls down, then less of each pulse arrives.
+     charcoal-gold/dark, GOLD ONLY on the one thing to notice per frame. Video sizes: lines >= 48 px, labels >= 30 px. */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .lab { font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; opacity:0.7; }
+  .line { font:600 56px/1.15 'Space Grotesk','Hind',sans-serif; text-wrap:balance; }
+  .gold { color:var(--gold); }
+  .blk { position:absolute; left:136px; width:640px; display:flex; flex-direction:column; gap:18px; }
+  #theory { top:190px; }
+  #chain { position:absolute; left:136px; top:470px; width:640px; display:flex; flex-direction:column; gap:22px; }
+  .step { display:flex; align-items:center; gap:22px; font:600 48px/1.2 'Space Grotesk','Hind',sans-serif; }
+  .step b { display:inline-flex; width:60px; height:60px; border-radius:30px; background:var(--cream); color:var(--dark);
+            align-items:center; justify-content:center; font:700 32px 'Space Grotesk','Hind',sans-serif; flex:none; }
+  #docs { top:190px; gap:40px; align-items:flex-start; }
+  #docs .stamp { display:inline-block; box-sizing:content-box; padding:8px 26px 12px; border:6px solid var(--gold); border-radius:14px;
+                 font:700 72px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); transform:rotate(-5deg); transform-origin:20% 50%; }
+  #reply { top:560px; }
+  #kit { position:absolute; left:1000px; top:80px; width:620px; height:950px; }
+  #grav { position:absolute; left:1690px; top:300px; width:120px; height:520px; overflow:visible; }
+  #grav text { fill:#FFF8E6; font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; opacity:0.7; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch8" data-start="0" data-duration="19.68" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="blk" id="theory"><div class="lab">GOYAL'S THEORY</div><div class="line">The <span class="gold">Gravity</span> Ageing Hypothesis</div></div>
+  <div id="chain">
+    <div class="step" id="c1"><b>1</b>A lifetime upright</div>
+    <div class="step" id="c2"><b>2</b>Less blood reaches the brain</div>
+    <div class="step" id="c3"><b>3</b>We age faster</div>
+  </div>
+  <div class="blk" id="docs"><div class="lab">DOCTORS</div><div class="stamp" id="stamp">PSEUDOSCIENCE</div></div>
+  <div class="blk" id="reply"><div class="lab">GOYAL</div><div class="line">Right or wrong, Temple is still useful</div></div>
+  <div id="kit"></div>
+  <svg id="grav" viewBox="0 0 120 520"><path d="M60 20 L60 440 M32 400 L60 452 L88 400" fill="none" stroke="#FFF8E6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="60" y="500" text-anchor="middle">GRAVITY</text></svg>
+</div>
+<!--BRAINKIT-->
+<script>
+  // Chapter-relative word times (words_raghav_v2.json; ch8 starts at 230.70 s of master v3). ONE entrance for every block:
+  // rise 24 px, 0.5 s, power3.out; exits 0.4 s. The blood path is drawn upward once ("दिमाग़ तक"), then its top half
+  // thins out on "कम पहुँचता": each pulse now reaches only a third of the way over the brain (the claim itself).
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(['#theory', '#c1', '#c2', '#c3', '#docs', '#reply', '#grav'], { autoAlpha: 0 });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  const B = BrainKit('#kit', { heart: true });
+  inn('#theory', 0.0);                                  // "इसके पीछे एक थ्योरी" ... "ग्रैविटी एजिंग हाइपोथिसिस" (0.02-3.8)
+  B.drawOn(tl, 1.9, 1.8);                               // the brain and its vessels sketch themselves in
+  B.flow(3.0, 8.3, { period: 0.9, colors: ['#F0412E'] });                 // the heart sends blood up to the brain: full strength
+  inn('#c1', 6.3);                                      // "ज़िंदगी भर सीधे खड़े रहने से" (6.44)
+  inn('#grav', 7.3);                                    // "सीधे खड़े" (7.33): gravity pulls down
+  inn('#c2', 8.35);                                     // "दिमाग़ तक ख़ून कम पहुँचता है" (8.41-9.69)
+  B.flow(8.9, 12.0, { period: 0.9, colors: ['#F0412E'], reach: () => 0.3 });   // "कम पहुँचता": only a third of each pulse now gets there
+  inn('#c3', 10.35);                                     // "इसी से हम जल्दी बूढ़े होते हैं" (10.36)
+  out(['#theory', '#c1', '#c2', '#c3'], 12.0);
+  tl.set('#docs', { autoAlpha: 1 }, 12.3);
+  tl.fromTo('#docs .lab', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 12.3);   // "डॉक्टरों ने" (12.31)
+  tl.fromTo('#stamp', { autoAlpha: 0, scale: 1.4, rotation: -1 }, { autoAlpha: 1, scale: 1, rotation: -5, duration: 0.18, ease: 'power4.in' }, 13.2)  // "स्यूडोसाइंस" (13.80)
+    .to('#stamp', { keyframes: [{ x: 6, duration: 0.04 }, { x: -4, duration: 0.04 }, { x: 0, duration: 0.05 }] }, 13.38);
+  inn('#reply', 14.7);                                  // "और गोयल भी मानते हैं" (15.24)
+  out(['#docs', '#reply', '#kit', '#grav'], 19.2);
+  out('#grav', 12.0);
+  const upd = t => B.update(t);
+  window.addEventListener('hf-seek', e => upd(e.detail.time));
+  tl.eventCallback('onUpdate', () => upd(tl.time()));
+  upd(0);
+  window.__timelines = { ch8: tl };
+</script>
+</body>
+</html>

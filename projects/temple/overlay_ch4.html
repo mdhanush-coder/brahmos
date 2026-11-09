@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* charcoal-gold/dark: cream words, GOLD ONLY on the one thing to notice per frame (PPG, the wave, BrainFlow).
+     Video sizes: display >= 72 px, lines read for meaning >= 48 px, labels >= 30 px. LAYOUT: plate right of centre,
+     every word in the left column (x 136 to ~700). The three light dots keep the emitters' real colours on purpose
+     (they label the device's actual light, matching the 3D): the only colours outside the palette. */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .note { position:absolute; left:136px; top:96px; font:italic 500 30px 'Space Grotesk','Hind',sans-serif; opacity:0.75; }
+  .chip { position:absolute; left:136px; padding:16px 28px; border-radius:14px; background:rgba(28,28,28,0.86); border:2px solid var(--edge);
+          font:600 36px/1.25 'Space Grotesk','Hind',sans-serif; }
+  .lab { font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; color:var(--cream); opacity:0.7; }
+  #ppg { position:absolute; left:136px; top:190px; display:flex; flex-direction:column; gap:16px; }
+  #ppg .big { font:700 140px/0.95 'Space Grotesk','Hind',sans-serif; color:var(--gold); letter-spacing:-0.02em; }
+  #ppg .sub { font:500 48px/1.2 'Space Grotesk','Hind',sans-serif; }
+  #steps { position:absolute; left:136px; top:190px; width:600px; display:flex; flex-direction:column; gap:24px; }
+  .step { display:flex; align-items:center; gap:22px; font:600 48px/1.2 'Space Grotesk','Hind',sans-serif; }
+  .step b { display:inline-flex; width:60px; height:60px; border-radius:30px; background:var(--cream); color:var(--dark);
+            align-items:center; justify-content:center; font:700 32px 'Space Grotesk','Hind',sans-serif; flex:none; }
+  #colours { position:absolute; left:136px; top:190px; display:flex; flex-direction:column; gap:20px; align-items:flex-start; }
+  .col { display:flex; align-items:center; gap:18px; font:600 48px 'Space Grotesk','Hind',sans-serif; }
+  .dot { width:36px; height:36px; border-radius:18px; flex:none; }
+  #extra { margin-top:28px; font:500 48px/1.25 'Space Grotesk','Hind',sans-serif; }
+  #wave { position:absolute; left:136px; bottom:120px; width:560px; }
+  #wave svg { display:block; }
+  #wave .lab { margin-top:16px; }
+  #watch { bottom:150px; font-size:48px; }
+  #algo { bottom:150px; font-weight:700; letter-spacing:0.08em; }
+  .card { position:absolute; left:136px; padding:32px 40px; border-radius:20px; background:rgba(28,28,28,0.9); border:2px solid var(--edge);
+          display:flex; flex-direction:column; gap:24px; width:600px; box-sizing:border-box; }
+  .card .t { font:700 72px/1 'Space Grotesk','Hind',sans-serif; }
+  .card .d { font:500 44px/1.3 'Space Grotesk','Hind',sans-serif; }
+  #bf .t { color:var(--gold); }
+  #bf { top:190px; }
+  #en { top:590px; }
+  #tick { display:flex; gap:12px; align-items:center; font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.12em; }
+  #tick i { width:22px; height:22px; border-radius:11px; background:var(--cream); display:inline-block; }
+  /* exploded-view part names (user, 2026-11-07): right of the stack, one even row each, angled leader to the part.
+     Rows sit at x 1580+ : the stack's right edge never passes 1507 px (part_tracks_ch4.json), so no label covers it. */
+  #leaders { position:absolute; left:0; top:0; width:1920px; height:1080px; pointer-events:none; }
+  #leaders polyline { fill:none; stroke:var(--cream); stroke-width:2; stroke-opacity:0.8; }
+  #leaders circle { fill:var(--cream); }
+  .pl { position:absolute; left:1580px; height:40px; margin-top:-20px; line-height:40px; white-space:nowrap;
+        font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.04em; color:var(--cream); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch4" data-start="0" data-duration="39.45" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="note" id="note">3D illustration</div>
+  <svg id="leaders" viewBox="0 0 1920 1080"></svg>
+  <div class="chip" id="watch">Same light sensor<br>as a smartwatch</div>
+  <div id="ppg"><div class="big">PPG</div><div class="sub">Photoplethysmography</div></div>
+  <div id="steps">
+    <div class="step" id="s1"><b>1</b>Light enters<br>the skin</div>
+    <div class="step" id="s2"><b>2</b>Blood absorbs<br>some of it</div>
+    <div class="step" id="s3"><b>3</b>The rest returns<br>to the sensor</div>
+  </div>
+  <div id="wave">
+    <svg width="560" height="140" viewBox="0 0 640 150" preserveAspectRatio="none"><path id="wpath" fill="none" stroke="#F5B700" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+      d="M0 100 L60 100 L80 96 L95 30 L110 120 L125 92 L150 100 L220 100 L240 96 L255 30 L270 120 L285 92 L310 100 L380 100 L400 96 L415 30 L430 120 L445 92 L470 100 L540 100 L560 96 L575 30 L590 120 L605 92 L640 100"/></svg>
+    <div class="lab">EVERY HEARTBEAT = ONE RIPPLE</div>
+  </div>
+  <div id="colours">
+    <div class="lab" id="clab">3 COLOURS OF LIGHT</div>
+    <div class="col" id="cg"><span class="dot" style="background:#2BD45A"></span>Green</div>
+    <div class="col" id="cr"><span class="dot" style="background:#F0412E"></span>Red</div>
+    <div class="col" id="ci"><span class="dot" style="background:#C0218A"></span>Infrared</div>
+    <div id="extra">+ heart rate, motion,<br>temperature sensors</div>
+  </div>
+  <div class="chip" id="algo">PROPRIETARY<br>ALGORITHM</div>
+  <div class="card" id="bf"><div class="t">BrainFlow</div><div class="d">A relative index, not a direct brain measurement</div></div>
+  <div class="card" id="en"><div class="t">Entropy</div><div class="d">A second score</div><div id="tick"><i id="tdot"></i>UPDATED EVERY SECOND</div></div>
+</div>
+<script>
+  // Chapter-relative word times (words_raghav.json, chapter starts 89.92 s). ONE entrance for every block: rise 24 px, 0.5 s,
+  // power3.out; exits 0.4 s. The 3D camera holds while words are read (ch4_job.py); its two moves fall between words.
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(['#note', '#watch', '#ppg', '#s1', '#s2', '#s3', '#clab', '#cg', '#cr', '#ci', '#extra', '#wave', '#algo', '#bf', '#en'], { autoAlpha: 0 });
+  const wp = document.getElementById('wpath'), L = wp.getTotalLength();
+  gsap.set(wp, { strokeDasharray: L, strokeDashoffset: L });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  tl.to('#note', { autoAlpha: 0.75, duration: 0.6 }, 0.2);
+  // RE-TIMED 2026-11-07 to the approved retake (speak b73db2e1, words transcribe 796def0e; audio starts at 0 of that take)
+  inn('#watch', 2.6);  out('#watch', 8.1);                                   // "कलाई पर" (2.61)
+  inn('#ppg', 5.65);   out('#ppg', 8.1);                                     // "पी पी जी" (5.66); leaves before the steps
+  inn('#s1', 8.5);                                                           // "रोशनी ... स्किन के अंदर" (8.52)
+  inn('#s2', 12.3);                                                          // "खून सोख" (12.33)
+  inn('#s3', 14.1);                                                          // "लौट कर ... सेंसर" (14.15): the return light grows in from 13.7 s
+  tl.set('#wave', { autoAlpha: 1 }, 16.2).to(wp, { strokeDashoffset: 0, duration: 3.2, ease: 'none' }, 16.25);   // "हर धड़कन ... लहर": drawn at heart pace (linear on purpose)
+  out(['#s1', '#s2', '#s3', '#wave'], 19.95);
+  inn('#clab', 20.5);                                                        // "तीन रंग" (20.56)
+  inn('#cg', 22.65); inn('#cr', 23.25); inn('#ci', 23.85);                   // हरी 22.68, लाल 23.28, इन्फ्रारेड 23.86
+  inn('#extra', 25.7);                                                       // "हार्ट रेट, मोशन, टेम्परेचर" (25.72)
+  out(['#clab', '#cg', '#cr', '#ci', '#extra'], 28.8);
+  inn('#algo', 29.4);  out('#algo', 33.4);                                   // "सीक्रेट एल्गोरिदम" (29.39)
+  inn('#bf', 34.0);                                                          // "ब्रेन फ़्लो" (34.05)
+  inn('#en', 36.65);                                                         // "एन्ट्रॉपी" (36.68)
+  [37.3, 38.3].forEach(t => tl.to('#tdot', { keyframes: [{ scale: 1.6, duration: 0.12 }, { scale: 1, duration: 0.3 }] }, t));   // "जो हर सेकंड" (37.54-38.2): ticks each second; a tick at 38.7 failed motion-check (competing with the exits)
+  out(['#bf', '#en', '#note'], 39.0);
+
+  // ---- part names on the exploded stack (4.4 - 9.9 s; the camera only moves again at 10.0 s, frame 300) ----
+  // TRACKS = part_tracks_ch4.json (Blender) packed: per part flat [xRight, yCentre, ...] for frames 100-220 step 4 (still after 220),
+  // normalised in plate space. Plate on the page: scale 0.78, moved +300 px (bg_layer.html).
+  const TRACKS = {"start":100,"step":4,"parts":{"shell":[.656,.422,.658,.387,.66,.354,.662,.324,.663,.298,.664,.279,.665,.265,.665,.259,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258,.665,.258],"battery":[.574,.546,.575,.528,.575,.507,.576,.483,.576,.459,.577,.434,.578,.412,.578,.392,.579,.376,.579,.365,.579,.358,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356,.579,.356],"pcb":[.624,.58,.624,.577,.624,.572,.625,.564,.625,.553,.626,.54,.626,.525,.627,.509,.628,.493,.629,.477,.629,.464,.63,.452,.63,.443,.63,.437,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434,.63,.434],"sensor_board":[.619,.584,.619,.584,.619,.584,.619,.584,.619,.583,.619,.58,.619,.576,.62,.569,.62,.561,.62,.552,.621,.542,.621,.531,.622,.521,.622,.511,.622,.503,.623,.496,.623,.492,.623,.489,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488,.623,.488],"foam_ring":[.628,.587,.628,.587,.628,.587,.628,.587,.628,.587,.628,.587,.628,.587,.628,.587,.628,.586,.628,.584,.628,.581,.628,.578,.629,.573,.629,.569,.629,.563,.629,.558,.63,.553,.63,.549,.63,.545,.63,.543,.63,.541,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54,.63,.54],"adhesive_pad":[.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616,.637,.616]}};
+  const PARTS = [  // track key, name, label row y (even 75 px steps), enters (s) as the part settles
+    ['shell', 'Shell', 300, 4.4], ['battery', 'Battery', 375, 4.9], ['pcb', 'PCB', 450, 5.4],
+    ['sensor_board', 'Sensor board', 525, 5.9], ['foam_ring', 'Foam ring', 600, 6.3], ['adhesive_pad', 'Adhesive pad', 675, 6.7]];
+  const svg = document.getElementById('leaders'), NS = 'http://www.w3.org/2000/svg';
+  const px = (x, n, dx) => (x - 0.5) * 0.78 * n + n / 2 + dx;
+  const ELBOW = 1550, END = 1568;
+  const legs = PARTS.map(([key, name, row, t]) => {
+    const g = document.createElementNS(NS, 'g'), pl = document.createElementNS(NS, 'polyline'), c = document.createElementNS(NS, 'circle');
+    c.setAttribute('r', 5); g.append(pl, c); svg.append(g);
+    const lab = document.createElement('div'); lab.className = 'pl'; lab.textContent = name; lab.style.top = row + 'px';
+    document.getElementById('root').append(lab);
+    gsap.set([g, lab], { autoAlpha: 0 });
+    tl.to(g, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, t);                        // leader first,
+    tl.fromTo(lab, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t + 0.15);  // then its name
+    out([g, lab], 9.5);
+    return { key, row, pl, c };
+  });
+  function place(sec) {
+    const u = (Math.min(220, Math.max(100, sec * 30 + 1)) - TRACKS.start) / TRACKS.step;   // settled after frame 220
+    const i = Math.min(Math.floor(u), 29), k = u - i;                // flat [x, y, x, y, ...], 31 samples, linear between
+    for (const L of legs) {
+      const v = TRACKS.parts[L.key], at = j => v[2 * i + j] + (v[2 * i + 2 + j] - v[2 * i + j]) * k;
+      const ax = px(at(0), 1920, 300) - 8, ay = px(at(1), 1080, 0);      // dot sits just inside the part's right edge
+      L.c.setAttribute('cx', ax); L.c.setAttribute('cy', ay);
+      L.pl.setAttribute('points', `${ax},${ay} ${ELBOW},${L.row} ${END},${L.row}`);   // angled, then level into the name
+    }
+  }
+  window.addEventListener('hf-seek', e => place(e.detail.time));
+  tl.eventCallback('onUpdate', () => place(tl.time()));
+  place(0);
+  window.__timelines = { ch4: tl };
+</script>
+</body>
+</html>

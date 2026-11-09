@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* ch7 "Why doctors push back": no 3D. Left column = the four objections as a numbered list that builds (the one being
+     spoken is full strength, the ones done step back to 45 %). Right (x 980-1780) = the detail of the current objection.
+     charcoal-gold/dark, GOLD ONLY on the one thing to notice per frame. Video sizes: lines >= 48 px, labels >= 30 px. */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); --dim:rgba(255,248,230,0.18); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .lab { font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; opacity:0.7; }
+  .line { font:600 56px/1.15 'Space Grotesk','Hind',sans-serif; text-wrap:balance; }
+  .gold { color:var(--gold); }
+  #head { position:absolute; left:136px; top:190px; }
+  #list { position:absolute; left:136px; top:270px; width:640px; display:flex; flex-direction:column; gap:30px; }
+  .row { display:flex; align-items:center; gap:22px; font:600 48px/1.2 'Space Grotesk','Hind',sans-serif; }
+  .row b { display:inline-flex; width:60px; height:60px; border-radius:30px; background:var(--cream); color:var(--dark);
+           align-items:center; justify-content:center; font:700 32px 'Space Grotesk','Hind',sans-serif; flex:none; }
+  .d { position:absolute; left:980px; top:270px; width:800px; display:flex; flex-direction:column; gap:30px; }
+  .who { font:600 30px/1.4 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; opacity:0.75; }
+  .bar { display:flex; height:72px; border-radius:16px; overflow:hidden; }
+  .bar .ex { flex:64; background:var(--dim); display:flex; align-items:center; padding-left:24px; }
+  .bar .un { flex:36; background:var(--gold); color:var(--dark); display:flex; align-items:center; justify-content:center; }
+  .bar span { font:700 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.12em; }
+  .chips { display:flex; flex-wrap:wrap; gap:18px; }
+  .chip { padding:16px 28px; border-radius:14px; background:rgba(28,28,28,0.86); border:2px solid var(--edge);
+          font:600 48px/1.2 'Space Grotesk','Hind',sans-serif; }
+  .quote { padding:28px 36px; border-radius:20px; background:rgba(28,28,28,0.9); border:2px solid var(--edge);
+           display:flex; flex-direction:column; gap:14px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch7" data-start="0" data-duration="42.24" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="lab" id="head">DOCTORS' 4 OBJECTIONS</div>
+  <div id="list">
+    <div class="row" id="r1"><b>1</b>Anatomy</div>
+    <div class="row" id="r2"><b>2</b>A third unexplained</div>
+    <div class="row" id="r3"><b>3</b>A narrow test group</div>
+    <div class="row" id="r4"><b>4</b>No medical approval</div>
+  </div>
+  <div class="d" id="d1"><div class="line">A scalp artery is <span class="gold">not the brain</span></div>
+    <div class="who" id="d1w">RAISED BY DR SUDHIR KUMAR,<br>NEUROLOGIST, APOLLO</div></div>
+  <div class="d" id="d2"><div class="lab">A 0.8 MATCH STILL LEAVES</div>
+    <div class="bar"><div class="ex"><span>EXPLAINED</span></div><div class="un" id="un"><span>~1/3</span></div></div>
+    <div class="line" id="d2l">About <span class="gold">a third</span> of the signal unexplained</div></div>
+  <div class="d" id="d3"><div class="lab">WHO WAS TESTED</div>
+    <div class="chips"><div class="chip" id="c1">Young</div><div class="chip" id="c2">Healthy</div><div class="chip" id="c3">Bending and standing in a lab</div></div>
+    <div class="line" id="d3l">Just when skin and brain blood <span class="gold">move together anyway</span></div></div>
+  <div class="d" id="d4"><div class="line"><span class="gold">No</span> medical approval</div>
+    <div class="quote" id="q1"><div class="who">DR SUVRANKAR DATTA, AIIMS DELHI</div><div class="line">Called it an expensive toy</div></div>
+    <div class="quote" id="q2"><div class="who">GOYAL, NOW</div><div class="line">A fitness and wellness device, not a medical device</div></div></div>
+</div>
+<script>
+  // Chapter-relative word times (words_raghav_v2.json; ch7 starts at 188.46 s of master v3). ONE entrance for every block:
+  // rise 24 px, 0.5 s, power3.out; exits 0.4 s. A finished row steps back to 45 % (opacity only, no movement).
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(['#head', '#r1', '#r2', '#r3', '#r4', '#d1', '#d1w', '#d2', '#d2l', '#d3', '#c1', '#c2', '#c3', '#d3l', '#d4', '#q1', '#q2'], { autoAlpha: 0 });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  const done = (sel, t) => tl.to(sel, { opacity: 0.45, duration: 0.4, ease: 'power2.out' }, t);
+  inn('#head', 0.0);                                    // "डॉक्टर चार बड़ी बातें उठाते हैं"
+  inn('#r1', 2.15);                                     // "पहली है एनाटॉमी" (2.19)
+  inn('#d1', 3.55);                                     // "क्योंकि सिर की स्किन वाली आर्टरी दिमाग़ नहीं है" (3.89)
+  inn('#d1w', 6.55);                                    // "अपोलो के न्यूरोलॉजिस्ट डॉक्टर सुधीर कुमार" (6.97)
+  out('#d1', 10.2);
+  done('#r1', 10.6); inn('#r2', 10.6);                  // "दूसरी" (11.35)
+  inn('#d2', 11.0);                                    // "ज़ीरो पॉइंट आठ का मेल" (11.99)
+  inn('#d2l', 15.75);                                   // "करीब एक तिहाई हिस्सा" (16.58)
+  out('#d2', 18.4);
+  done('#r2', 18.6); inn('#r3', 18.6);                // "तीसरी" (19.80)
+  tl.set('#d3', { autoAlpha: 1 }, 19.4);
+  inn('#d3 .lab', 19.4);                                // "स्टडी में" (20.56)
+  inn('#c1', 20.2); inn('#c2', 20.75); inn('#c3', 22.1);   // जवान 21.60, सेहतमंद 22.20, लैब में झुक 23.74
+  inn('#d3l', 24.35);                                    // "यानी ठीक वही हालात" (26.44)
+  out('#d3', 28.95);
+  done('#r3', 29.45); inn('#r4', 29.45);                // "और चौथी" (31.37)
+  tl.set('#d4', { autoAlpha: 1 }, 30.4);
+  inn('#d4 > .line', 30.4);                             // "टेम्पल के पास कोई मेडिकल मंज़ूरी नहीं" (32.33)
+  inn('#q1', 32.75);                                    // "एम्स दिल्ली के डॉक्टर" (35.21)
+  inn('#q2', 36.7);                                    // "और अब गोयल ख़ुद कहते हैं" (39.89)
+  out(['#d4', '#head', '#list'], 41.7);
+  window.__timelines = { ch7: tl };
+</script>
+</body>
+</html>

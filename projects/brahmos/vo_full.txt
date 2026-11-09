@@ -1,0 +1,55 @@
+[a documentary narrator explaining to a friend, warm and clear, steady pace] It's night on the open sea, and a warship's radar is sweeping quietly. Then a tiny dot appears at the edge, just a few metres above the water.
+That dot is covering about a kilometre every second, which leaves the ship roughly half a minute to react.
+[pause]
+Its name is Brahmos, one of the fastest cruise missiles in the world, flying at nearly three times the speed of sound.
+But here's the strange part, the engine that keeps it this fast has no fan, no compressor and no turbine. So how does it fly?
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] The name comes from two rivers, India's Brahmaputra and Russia's Moskva, because the two countries agreed to build it together in nineteen ninety-eight.
+It's about eight metres long and weighs around three thousand kilograms, so it's nearly as long as a city bus.
+Inside are five sections, and at the very front is the Seeker, its eye, followed by the Guidance System, its brain, and then the Warhead.
+Behind them sits the Ramjet Engine, which keeps it fast, and at the back is the Booster, which gets it off the ground.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] Brahmos lives inside a sealed Canister, which is both its storage box and its launch tube. A twelve-wheeled truck carries three of them and raises them upright to fire.
+[pause]
+Then the Booster ignites, and it's a solid fuel rocket, a lot like a festival rocket, with its fuel packed in as a solid block.
+As it leaves the canister, the missile tips over toward its target, and within a few seconds it's going faster than sound.
+Then the booster drops away, and the real engine takes over.
+[pause]
+But that raises a question. If the missile already has an engine, why carry a heavy booster at all?
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] The answer is the Ramjet Engine, one of the simplest engines ever built, because it has no moving parts at all.
+A normal jet engine uses fans and a compressor to squeeze the air, and a turbine at the back to spin them.
+A ramjet does the squeezing with speed alone, kind of like the wind that pushes against your face on a fast motorbike.
+The air hits the Intake Cone in the nose and forms shock waves, and every shock squeezes the air tighter and heats it up.
+Liquid fuel is sprayed into that hot, squeezed air, it burns and expands, and it blasts out of the Nozzle to push the missile forward.
+[pause]
+There's a catch, though. The air only gets squeezed if the missile is already moving fast, so a ramjet sitting still produces no thrust at all.
+That's why the booster pushes it past the speed of sound first, and the ramjet then holds it at nearly Mach two point eight.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] Speed is only half the job, because hitting the right target at that speed is the work of the Guidance System.
+It can cruise as high as fifteen kilometres, where an inertial system keeps counting where it is. Satellite navigation corrects its small errors, just like the map on your phone.
+So why would a missile this fast fly so low? For the final stretch it drops down and skims the sea, only about ten metres above the waves.
+That's where the curve of the Earth helps, because a ship's radar can only see something that low from about thirty kilometres away.
+[pause]
+As it closes in, the Seeker wakes up, sends out its own radio waves, and locks on using the echo that comes back.
+In the last moments it can weave in an S shape or climb and dive steeply, which makes it much harder to stop.
+That's why it's called fire and forget. Once it's launched, the missile makes every decision on its own.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] But the real power of Brahmos isn't only its Warhead, it's the speed, and that comes down to one simple rule of physics.
+The energy of a moving object grows with the square of its speed. Twice the speed gives four times the energy, and three times the speed gives nine.
+That's why Brahmos hits with roughly nine times the kinetic energy of a typical subsonic cruise missile.
+Think of a cricket ball tossed gently, and the same ball bowled three times faster, and you can feel the difference.
+[pause]
+Speed also steals time. The last thirty kilometres take a subsonic missile about two minutes, but Brahmos covers them in around thirty seconds.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] So where can it be fired from? Almost anywhere, from ships, from trucks, from under water and from the air.
+The air version weighs two and a half thousand kilograms, and it's the heaviest weapon the Sukhoi thirty fighter has ever carried.
+Its range started at two hundred ninety kilometres, India now has versions that reach about five hundred, and one with around eight hundred is in development.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] In May twenty twenty-five, after Operation Sindoor, India's Prime Minister publicly confirmed that Brahmos had been used.
+That same month a new factory opened in Lucknow, and today about eighty percent of the missile is made in India.
+Other countries are buying it too, the Philippines already has it on its coast, and Vietnam and Indonesia have reportedly signed deals as well.
+
+[a documentary narrator explaining to a friend, warm and clear, steady pace] So Brahmos is really a flying pipe, a bit like a blowtorch that breathes its own speed. A booster lifts it, a ramjet with no moving parts keeps it near Mach three, and a brain hides it below the radar.
+[long pause]
+And that ship we started with had just half a minute. So tell me, what would you do with those thirty seconds?

@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* 2-second end screen (user: "what is your opinion, mention in the comments"). charcoal-gold; gold only on the key word. */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  #wrap { position:absolute; left:0; right:0; top:250px; display:flex; flex-direction:column; align-items:center; gap:34px; text-align:center; }
+  .q   { font:700 128px/1.02 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.02em; }
+  .sub { font:600 56px/1.2 'Space Grotesk','Hind',sans-serif; opacity:0.95; }
+  .cta { display:flex; align-items:center; gap:26px; padding:22px 44px; border-radius:24px; border:2px solid var(--edge);
+         background:rgba(255,248,230,0.06); font:700 56px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:0.06em; margin-top:18px; }
+  .gold { color:var(--gold); }
+  #bub { width:84px; height:84px; flex:none; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="endcard" data-start="0" data-duration="2" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div id="wrap">
+    <div class="q" id="q1">What's your <span class="gold">opinion</span>?</div>
+    <div class="sub" id="q2">Big discovery, or an expensive toy?</div>
+    <div class="cta" id="q3">
+      <svg id="bub" viewBox="0 0 84 84"><path d="M10 14 H74 V56 H44 L26 72 V56 H10 Z" fill="none" stroke="#FFF8E6" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="28" cy="35" r="4" fill="#F5B700"/><circle cx="42" cy="35" r="4" fill="#F5B700"/><circle cx="56" cy="35" r="4" fill="#F5B700"/></svg>
+      TELL US IN THE COMMENTS
+    </div>
+  </div>
+</div>
+<script>
+  // 2 s: three lines rise in one after another (0.4 s each, 0.25 s apart) and hold. No exit: the video ends on this card.
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(['#q1', '#q2', '#q3'], { autoAlpha: 0 });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, t);
+  inn('#q1', 0.0); inn('#q2', 0.25); inn('#q3', 0.5);
+  window.__timelines = { endcard: tl };
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+ "the name": {
+  "number": "1998"
+ },
+ "it's about": {
+  "number": "8.4 m \u00b7 3,000 kg"
+ },
+ "seeker": {
+  "part": "seeker",
+  "shot": "explode",
+  "after": "is the"
+ },
+ "guidance system": {
+  "part": "guidance_system",
+  "shot": "explode",
+  "after": "by the"
+ },
+ "warhead": {
+  "part": "warhead",
+  "shot": "explode",
+  "after": "then the"
+ },
+ "ramjet engine": {
+  "part": "ramjet_engine",
+  "shot": "explode",
+  "after": "sits the"
+ },
+ "booster": {
+  "part": "booster",
+  "shot": "explode",
+  "after": "is the"
+ }
+}

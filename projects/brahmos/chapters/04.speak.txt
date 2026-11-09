@@ -1,0 +1,8 @@
+[a documentary narrator explaining to a friend, warm and clear, steady pace] The answer is the Ramjet Engine, one of the simplest engines ever built, because it has no moving parts at all.
+A normal jet engine uses fans and a compressor to squeeze the air, and a turbine at the back to spin them.
+A ramjet does the squeezing with speed alone, kind of like the wind that pushes against your face on a fast motorbike.
+The air hits the Intake Cone in the nose and forms shock waves, and every shock squeezes the air tighter and heats it up.
+Liquid fuel is sprayed into that hot, squeezed air, it burns and expands, and it blasts out of the Nozzle to push the missile forward.
+[pause]
+There's a catch, though. The air only gets squeezed if the missile is already moving fast, so a ramjet sitting still produces no thrust at all.
+That's why the booster pushes it past the speed of sound first, and the ramjet then holds it at nearly Mach two point eight.

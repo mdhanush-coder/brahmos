@@ -1,0 +1,21 @@
+{
+ "ramjet engine": {
+  "part": "ramjet_engine",
+  "shot": "focus",
+  "chip": "ZERO MOVING PARTS",
+  "after": "is the"
+ },
+ "intake cone": {
+  "part": "intake_cone",
+  "shot": "focus",
+  "after": "hits the"
+ },
+ "nozzle": {
+  "part": "nozzle",
+  "shot": "focus",
+  "after": "of the"
+ },
+ "that's why": {
+  "number": "MACH 2.8"
+ }
+}

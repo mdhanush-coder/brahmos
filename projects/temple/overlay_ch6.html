@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* ch6 "Temple's evidence": no 3D. Words in the left column, the evidence drawn on the right (x 960-1780).
+     Opening (user, 2026-11-07): the Blender anatomy plate (x-ray head, Temple on the temple, red/green/infrared light, the brain pumping), red/green/blue
+     light pulses travelling up into the brain, the brain pumping in each pulse's colour - "its signal still tracks the brain".
+     Honest graphics only: the match is a 0-1 scale filled to 0.8 (no invented data points); study 2 is 60 squares, 59 lit.
+     charcoal-gold/dark, GOLD ONLY on the one thing to notice per frame (the light colours are the device's real LEDs). */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); --dim:rgba(255,248,230,0.18); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .lab { font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; opacity:0.7; }
+  .line { font:600 48px/1.2 'Space Grotesk','Hind',sans-serif; text-wrap:balance; }
+  .big { font:700 128px/1 'Space Grotesk','Hind',sans-serif; letter-spacing:-0.02em; }
+  .gold { color:var(--gold); }
+  .blk { position:absolute; left:136px; width:640px; display:flex; flex-direction:column; gap:20px; }
+  #claim { top:190px; }
+  #two { top:520px; }
+  #s1, #s2 { top:190px; gap:26px; }
+  .card { position:absolute; left:136px; width:640px; box-sizing:border-box; padding:32px 40px; border-radius:20px;
+          background:rgba(28,28,28,0.9); border:2px solid var(--edge); display:flex; flex-direction:column; gap:22px; }
+  #pre { top:190px; }
+  #pre .t { font:700 88px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); letter-spacing:0.04em; }
+  /* the head plate is cropped at the frame bottom: fade the neck out instead of a hard edge */
+  #plate { -webkit-mask-image:linear-gradient(to bottom, #000 74%, transparent 94%); mask-image:linear-gradient(to bottom, #000 74%, transparent 94%); }
+  #lights { position:absolute; left:136px; top:880px; display:flex; gap:30px; }
+  #lights span { display:flex; align-items:center; gap:12px; font:600 30px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.12em; }
+  #lights i { width:22px; height:22px; border-radius:11px; display:inline-block; }
+  .viz { position:absolute; left:980px; width:800px; }
+  #meter { top:330px; }
+  #meter .val { font:700 160px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); }
+  #meter .bar { position:relative; height:28px; border-radius:14px; background:var(--dim); margin-top:36px; overflow:hidden; }
+  #meter .fill { position:absolute; left:0; top:0; bottom:0; width:80%; background:var(--gold); border-radius:14px; transform-origin:0 50%; }
+  #meter .ends { display:flex; justify-content:space-between; margin-top:18px; }
+  #grid60 { top:250px; display:grid; grid-template-columns:repeat(10, 64px); gap:14px; }
+  #grid60 i { width:64px; height:64px; border-radius:10px; background:var(--dim); display:block; }
+  #g60cap { position:absolute; left:980px; top:740px; width:800px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch6" data-start="0" data-duration="36.704" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div id="lights"><span><i style="background:#F0412E"></i>RED</span><span><i style="background:#2BD45A"></i>GREEN</span><span><i style="background:#3A7BFF"></i>INFRARED</span></div>
+  <div class="blk" id="claim"><div class="lab">TEMPLE'S CLAIM</div><div class="line">Its signal still tracks the <span class="gold">brain</span></div></div>
+  <div class="blk" id="two"><div class="big">2</div><div class="lab">STUDIES AS PROOF</div></div>
+  <div class="blk" id="s1"><div class="lab">STUDY 1</div><div class="line" id="s1a">20 people wore it</div>
+    <div class="line" id="s1b">alongside transcranial Doppler:</div><div class="line" id="s1c">an ultrasound of the brain's main artery</div></div>
+  <div class="viz" id="meter"><div class="lab">HOW CLOSELY THEY MATCHED</div><div class="val">≈ 0.8</div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="ends"><span class="lab">0 NO MATCH</span><span class="lab">1 PERFECT</span></div></div>
+  <div class="blk" id="s2"><div class="lab">STUDY 2</div><div class="line" id="s2a">60 people</div>
+    <div class="line" id="s2b">checked against an infrared scanner that reads skin and brain layers separately</div></div>
+  <div class="viz" id="grid60"></div>
+  <div id="g60cap"><div class="line"><span class="gold">59 of 60</span> sessions moved the same way</div></div>
+  <div class="card" id="pre"><div class="t">PREPRINT</div><div class="line">Neither study has been checked by outside scientists yet</div></div>
+</div>
+<script>
+  // Chapter-relative word times (words_raghav_v3.json; ch6 starts at 151.757 s of master v3). ONE entrance for every block:
+  // rise 24 px, 0.5 s, power3.out; exits 0.4 s. Motion that acts on meaning: the light pulses and the brain's pump
+  // (the user asked for them), the scale filling to 0.8 on "ज़ीरो पॉइंट आठ", the squares lighting on "उनसठ".
+  const tl = gsap.timeline({ paused: true });
+  const grid = document.getElementById('grid60');
+  for (let i = 0; i < 60; i++) grid.appendChild(document.createElement('i'));
+  const sq = [...grid.children];
+  gsap.set(['#claim', '#two', '#s1', '#s1a', '#s1b', '#s1c', '#meter', '#s2', '#s2a', '#s2b', '#grid60', '#g60cap', '#pre', '#lights'], { autoAlpha: 0 });
+  gsap.set('#fill', { scaleX: 0 });
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  inn('#claim', 0.0);                                         // "टेम्पल का कहना है ... दिमाग़ के साथ चलता है" (0.01-3.79)
+  inn('#lights', 0.9);                                        // the plate's four heartbeats at 0.9, 2.4, 3.9, 5.4 s: red, green, infrared, red
+  inn('#two', 4.3);                                           // "और इसके लिए वो दो स्टडी" (4.27-5.47)
+  out(['#claim', '#two', '#lights'], 6.2);
+  tl.to('#plate', { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, 5.85);   // the 3D plate leaves with the words
+  tl.set('#s1', { autoAlpha: 1 }, 6.6);
+  inn('#s1 .lab', 6.6);                                       // "पहली स्टडी" (6.59)
+  inn('#s1a', 7.5);                                           // "बीस लोगों" (7.55)
+  inn('#s1b', 9.55);                                          // "ट्रांसक्रेनियल डॉप्लर" (9.57)
+  inn('#s1c', 11.65);                                         // "यानी ... अल्ट्रासाउंड" (11.69)
+  inn('#meter', 14.0);                                        // "जिसमें दोनों का मेल" (14.05)
+  tl.to('#fill', { scaleX: 1, duration: 1.0, ease: 'power2.out' }, 15.4);   // "ज़ीरो पॉइंट आठ" (15.41-16.39): fills on the number
+  out(['#s1', '#meter'], 16.95);
+  tl.set('#s2', { autoAlpha: 1 }, 17.35);
+  inn('#s2 .lab', 17.35);                                     // "दूसरी स्टडी" (17.39)
+  inn(['#s2a', '#grid60'], 18.25);                            // "साठ लोग" (18.29): the 60 sessions as squares
+  inn('#s2b', 20.25);                                         // "इन्फ्रारेड स्कैनर" (20.29)
+  tl.to(sq.slice(0, 59), { backgroundColor: '#F5B700', duration: 0.25, stagger: 0.012, ease: 'none' }, 25.45);   // "उनसठ" (25.49)
+  inn('#g60cap', 25.5);
+  out(['#s2', '#grid60', '#g60cap'], 28.4);
+  inn('#pre', 30.1);                                          // "लेकिन दोनों स्टडी अभी प्रीप्रिंट" (30.12-31.28)
+  out('#pre', 36.2);
+  window.__timelines = { ch6: tl };
+</script>
+</body>
+</html>

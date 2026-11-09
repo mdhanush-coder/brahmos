@@ -1,0 +1,16 @@
+{
+ "canister": {
+  "part": "canister",
+  "shot": "launch",
+  "number": "3 per truck",
+  "after": "a sealed"
+ },
+ "booster": {
+  "part": "booster",
+  "shot": "launch",
+  "after": "then the"
+ },
+ "as it": {
+  "chip": "SUPERSONIC"
+ }
+}

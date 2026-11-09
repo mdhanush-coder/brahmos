@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .note { position:absolute; left:136px; top:96px; font:italic 500 28px 'Space Grotesk','Hind',sans-serif; opacity:0.75; }
+  .chip { position:absolute; padding:16px 28px; border-radius:14px; background:rgba(28,28,28,0.86); border:2px solid var(--gold);
+          font:600 36px 'Space Grotesk','Hind',sans-serif; white-space:nowrap; }
+  .lab { font:600 26px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.18em; color:var(--gold); }
+  #left { position:absolute; left:136px; top:190px; width:560px; display:flex; flex-direction:column; gap:48px; }
+  #ppg .big { font:700 150px/0.95 'Space Grotesk','Hind',sans-serif; color:var(--gold); letter-spacing:-0.02em; }
+  #ppg .sub { margin-top:16px; font:500 36px 'Space Grotesk','Hind',sans-serif; }
+  #steps { display:flex; flex-direction:column; gap:24px; }
+  .step { display:flex; align-items:center; gap:20px; font:600 36px 'Space Grotesk','Hind',sans-serif; }
+  .step b { display:inline-flex; width:56px; height:56px; border-radius:28px; background:var(--gold); color:var(--dark);
+            align-items:center; justify-content:center; font:700 32px 'Space Grotesk','Hind',sans-serif; flex:none; }
+  #right { position:absolute; right:136px; top:190px; width:520px; display:flex; flex-direction:column; gap:48px; align-items:flex-end; }
+  #legend { display:flex; flex-direction:column; gap:16px; align-items:flex-end; }
+  #legend .row { font:600 34px 'Space Grotesk','Hind',sans-serif; }
+  #colours { display:flex; flex-direction:column; gap:20px; align-items:flex-end; }
+  .col { display:flex; align-items:center; gap:18px; font:600 40px 'Space Grotesk','Hind',sans-serif; }
+  .dot { width:34px; height:34px; border-radius:17px; flex:none; }
+  #extra { font:500 32px 'Space Grotesk','Hind',sans-serif; text-align:right; }
+  #wave { position:absolute; left:136px; bottom:120px; width:640px; }
+  #wave svg { display:block; }
+  #wave .lab { margin-top:16px; }
+  #algo { right:136px; bottom:150px; background:var(--gold); color:var(--dark); font-weight:700; letter-spacing:0.08em; }
+  .card { position:absolute; padding:32px 40px; border-radius:20px; background:rgba(28,28,28,0.9); border:2px solid var(--gold);
+          display:flex; flex-direction:column; gap:16px; width:520px; box-sizing:border-box; }
+  .card .t { font:700 72px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); }
+  .card .d { font:500 32px/1.3 'Space Grotesk','Hind',sans-serif; }
+  #bf { left:136px; top:190px; }
+  #en { right:136px; top:190px; }
+  #tick { display:flex; gap:12px; align-items:center; font:600 28px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.12em; }
+  #tick i { width:22px; height:22px; border-radius:11px; background:var(--gold); display:inline-block; }
+</style>
+<style id="design-polish">
+#s3{text-wrap:balance !important}
+#en > div:nth-child(2){margin-top:15px !important}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch4" data-start="0" data-duration="39.45" data-width="1920" data-height="1080">
+  <div class="note" id="note">3D illustration</div>
+  <div class="chip" id="watch" style="left:136px; bottom:150px">Same light sensor as a smartwatch</div>
+  <div id="left">
+    <div id="ppg"><div class="big">PPG</div><div class="sub">Photoplethysmography</div></div>
+    <div id="steps">
+      <div class="step" id="s1"><b>1</b>Light enters the skin</div>
+      <div class="step" id="s2"><b>2</b>Blood absorbs some</div>
+      <div class="step" id="s3"><b>3</b>The rest returns to the sensor</div>
+    </div>
+  </div>
+  <div id="right">
+    <div id="legend">
+      <div class="lab">INSIDE</div>
+      <div class="row">Gold shell</div><div class="row">Battery</div><div class="row">Main board</div>
+      <div class="row">Sensor board</div><div class="row">Foam ring</div><div class="row">Adhesive pad</div>
+    </div>
+    <div id="colours">
+      <div class="lab" id="clab">3 COLOURS OF LIGHT</div>
+      <div class="col" id="cg">Green<span class="dot" style="background:#2BD45A"></span></div>
+      <div class="col" id="cr">Red<span class="dot" style="background:#F0412E"></span></div>
+      <div class="col" id="ci">Infrared<span class="dot" style="background:#C0218A"></span></div>
+    </div>
+    <div id="extra">+ Heart rate · Motion · Temperature sensors</div>
+  </div>
+  <div id="wave">
+    <svg width="640" height="150" viewBox="0 0 640 150"><path id="wpath" fill="none" stroke="#F5B700" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+      d="M0 100 L60 100 L80 96 L95 30 L110 120 L125 92 L150 100 L220 100 L240 96 L255 30 L270 120 L285 92 L310 100 L380 100 L400 96 L415 30 L430 120 L445 92 L470 100 L540 100 L560 96 L575 30 L590 120 L605 92 L640 100"/></svg>
+    <div class="lab">EVERY HEARTBEAT = ONE RIPPLE</div>
+  </div>
+  <div class="chip" id="algo">PROPRIETARY ALGORITHM</div>
+  <div class="card" id="bf"><div class="t">BrainFlow</div><div class="d">A relative index, not a direct brain measurement</div></div>
+  <div class="card" id="en"><div class="t">Entropy</div><div class="d">A second score</div><div id="tick"><i id="tdot"></i>UPDATED EVERY SECOND</div></div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  const all = ['#note', '#watch', '#ppg', '#s1', '#s2', '#s3', '#legend', '#clab', '#cg', '#cr', '#ci', '#extra', '#wave', '#algo', '#bf', '#en'];
+  gsap.set(all, { autoAlpha: 0 });
+  const wp = document.getElementById('wpath'), L = wp.getTotalLength();
+  gsap.set(wp, { strokeDasharray: L, strokeDashoffset: L });
+  const inn = (sel, t, from) => tl.fromTo(sel, Object.assign({ autoAlpha: 0 }, from || { y: 24 }), { autoAlpha: 1, x: 0, y: 0, duration: 0.5, ease: 'power3.out' }, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  tl.to('#note', { autoAlpha: 0.75, duration: 0.6 }, 0.2);
+  inn('#watch', 3.1, { x: -30 });  out('#watch', 8.4);
+  inn('#ppg', 5.7);
+  inn('#legend', 6.8, { x: 30 }); out('#legend', 12.6);
+  inn('#s1', 8.8, { x: -24 });
+  inn('#s2', 12.2, { x: -24 });
+  inn('#s3', 13.95, { x: -24 });
+  out(['#ppg', '#s1', '#s2', '#s3'], 19.9);
+  tl.set('#wave', { autoAlpha: 1 }, 16.3).to(wp, { strokeDashoffset: 0, duration: 3.2, ease: 'none' }, 16.35);
+  out('#wave', 20.2);
+  inn('#clab', 20.8, { x: 30 });
+  inn('#cg', 23.05, { x: 30 }); inn('#cr', 23.73, { x: 30 }); inn('#ci', 24.5, { x: 30 });
+  inn('#extra', 25.9, { x: 30 });
+  out(['#clab', '#cg', '#cr', '#ci', '#extra'], 29.1);
+  inn('#algo', 29.8);  out('#algo', 33.2);
+  inn('#bf', 33.85, { y: 30 });
+  inn('#en', 36.28, { y: 30 });
+  [37.3, 38.3].forEach(t => tl.to('#tdot', { keyframes: [{ scale: 1.6, duration: 0.12 }, { scale: 1, duration: 0.3 }] }, t));
+  out(['#bf', '#en', '#note'], 38.95);
+  window.__timelines = { ch4: tl };
+</script>
+</body>
+</html>

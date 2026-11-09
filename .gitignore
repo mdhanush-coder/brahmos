@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.blend
+*.blend1
+job_*.py
+skilllib.py
+projects/brahmos/overlays/chk*/
+projects/brahmos/overlays/*.zip

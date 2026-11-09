@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+  /* charcoal-gold/dark: charcoal ground, cream words, GOLD ONLY on the one word or number that matters in each frame.
+     Typography (video sizes, Motion Director): display >= 72 px, lines read for meaning >= 48 px, labels >= 30 px.
+     LAYOUT: the 3D plate sits right of centre (build_pages.py); every word lives in the left column (x 136 to ~700). */
+  :root { --dark:#1C1C1C; --gold:#F5B700; --cream:#FFF8E6; --edge:rgba(255,248,230,0.35); }
+  body { margin:0; }
+  #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--dark);
+          font-family:'Space Grotesk','Hind',sans-serif; color:var(--cream); }
+  .note { position:absolute; left:136px; top:96px; font:italic 500 30px 'Space Grotesk','Hind',sans-serif; opacity:0.75; }
+  /* fixed width: the counter widening from ₹0 to ₹85,000 re-flowed the column and re-wrapped the caption while it was read
+     (motion-check text.moves-while-read, 9.2 %); tabular digits keep the number itself from jittering */
+  #price { position:absolute; left:136px; top:190px; width:600px; display:flex; flex-direction:column; gap:32px; }
+  #price .num { font:700 128px/1 'Space Grotesk','Hind',sans-serif; color:var(--gold); letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+  #price .cap { font:600 30px/1.3 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; opacity:0.85; text-wrap:balance; }
+  .chip { position:absolute; left:136px; padding:18px 30px; border-radius:14px; background:rgba(28,28,28,0.86);
+          border:2px solid var(--edge); font:600 36px/1.25 'Space Grotesk','Hind',sans-serif; }
+  #where { bottom:150px; font-size:48px; }
+  #date { top:190px; letter-spacing:0.04em; }
+  #crash { top:348px; background:var(--gold); color:var(--dark); border-color:var(--gold); font-weight:700; letter-spacing:0.06em; }
+  #doctors { position:absolute; left:136px; top:520px; display:flex; flex-direction:column; align-items:flex-start; gap:56px; }
+  #doctors .lbl { font:600 40px 'Space Grotesk','Hind',sans-serif; letter-spacing:0.08em; }
+  /* compact on purpose: polish's auto-fix once grew it into a 372 px box with the word sunk to the bottom (rendered, caught) */
+  #doctors .stamp { display:inline-block; box-sizing:content-box; height:auto; padding:8px 30px 14px; border:8px solid var(--gold); border-radius:16px;
+                    font:700 120px/1 'Space Grotesk','Hind',sans-serif;
+                    color:var(--gold); transform:rotate(-7deg); transform-origin:20% 50%; }
+  #who { position:absolute; left:136px; bottom:150px; font:700 104px/1 'Space Grotesk','Hind',sans-serif; }
+  #who span { color:var(--gold); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ch1" data-start="0" data-duration="24.28" data-width="1920" data-height="1080">
+  <!--PLATE-->
+  <div class="note" id="note">3D illustration</div>
+  <div id="price"><div class="num" id="num">₹0</div><div class="cap" id="cap">PRICE, INCL. LIFETIME<br>SUBSCRIPTION</div></div>
+  <div class="chip" id="where">Worn on the temple,<br>beside the eye</div>
+  <div class="chip" id="date">1 NOV 2026<br>PRE-ORDERS OPEN</div>
+  <div class="chip" id="crash">WEBSITE CRASHED</div>
+  <div id="doctors"><div class="lbl" id="dlbl">DOCTORS:</div><div class="stamp" id="stamp">TOY?</div></div>
+  <div id="who">WHO'S<br><span>RIGHT?</span></div>
+</div>
+<script>
+  // Every element lands ON its spoken word (words_raghav.json). ONE entrance for every block (rise 24 px, 0.5 s, power3.out),
+  // exits 0.4 s; the only exceptions act ON the words: the counter, the crash glitch, the stamp slam (kinetic-type.md).
+  const tl = gsap.timeline({ paused: true });
+  const fmt = v => '₹' + Math.round(v).toLocaleString('en-IN');     // escaped: never depends on the page encoding
+  const c = { v: 0 };
+  const IN = { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' };
+  const inn = (sel, t) => tl.fromTo(sel, { autoAlpha: 0, y: 24 }, IN, t);
+  const out = (sel, t) => tl.to(sel, { autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, t);
+  gsap.set(['#note', '#price', '#where', '#date', '#crash', '#doctors', '#who'], { autoAlpha: 0 });
+  tl.to('#note', { autoAlpha: 0.75, duration: 0.6, ease: 'power2.out' }, 0.2);
+  // RE-TIMED 2026-11-07 to the v2 narration (words_raghav_v2.json, master times; ch1 starts at 0)
+  inn('#price', 0.0);                                                         // "पचासी हज़ार रुपये" (0.03-1.17)
+  tl.to(c, { v: 85000, duration: 1.05, ease: 'power2.out', onUpdate: () => { document.getElementById('num').textContent = fmt(c.v); } }, 0.03);
+  out('#price', 7.3);
+  inn('#where', 1.7);  out('#where', 7.6);                                    // "छोटे से डिवाइस" (1.73) until "बगल में" ends (7.6)
+  inn('#date', 8.0);                                                          // "एक नवंबर" (8.07)
+  tl.set('#crash', { autoAlpha: 1 }, 12.05)                                   // "क्रैश" (12.07): x-jitter only
+    .fromTo('#crash', { x: 0 }, { keyframes: [{ x: -14, duration: 0.05 }, { x: 10, duration: 0.05 }, { x: -6, duration: 0.05 }, { x: 4, duration: 0.05 }, { x: 0, duration: 0.05 }] }, 12.05);
+  // (no opacity flicker: motion-check read the dips as the words leaving before they were read, reading.hold-short)
+  out(['#date', '#crash'], 14.2);
+  tl.set('#doctors', { autoAlpha: 1 }, 14.8);                                 // "डॉक्टर" (14.86): the label rises in
+  tl.fromTo('#dlbl', { autoAlpha: 0, y: 24 }, IN, 14.8);
+  tl.set('#stamp', { autoAlpha: 0 }, 14.8)                                    // "खिलौना" (16.66): the TOY? stamp slams on the word
+    .fromTo('#stamp', { autoAlpha: 0, scale: 1.45, rotation: -2 }, { autoAlpha: 1, scale: 1, rotation: -7, duration: 0.18, ease: 'power4.in' }, 16.63)
+    .to('#stamp', { keyframes: [{ x: 6, duration: 0.04 }, { x: -4, duration: 0.04 }, { x: 0, duration: 0.05 }] }, 16.81);
+  out('#doctors', 17.95);
+  inn('#who', 18.5);  out('#who', 23.3);                                      // "तो सही कौन है?" (18.54)
+  out('#note', 23.75);
+  window.__timelines = { ch1: tl };
+</script>
+</body>
+</html>
