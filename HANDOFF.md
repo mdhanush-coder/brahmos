@@ -101,3 +101,19 @@ Shot ideas for ch4-9 are in 03_script.md (visual directive per line) and 04_crea
    headline card, Lucknow factory, 80 %, globe), ch9 (one fly-through nose->nozzle, back to the radar at 0:00, end card).
 5. Sound effects (find_sound, check licences), music (ask the user), thumbnail (Poster Director), YouTube text
    (title options, description with chapters + sources + warship credit), then the English version.
+
+## 7. UPDATE (after the first push, same day)
+- **Ch1 low-res render DONE** (job `dddc30b3`, 26.9 min = ~1.2 s/frame for 1376 frames): output key
+  `output/dddc30b3-e2e9-462d-b1e6-2bbea79fcc03/ch1_plate.mp4`, local copy `projects/brahmos/plates/ch1_plate_lowres_v3.mp4`,
+  stills in `review/ch1v3/` + `review/ch1v3_video_sheet.png`. The user has the link; **waiting for the user's feedback.**
+- My own review of it (told to the user, who has NOT decided yet):
+  1. Chase shot 14-27 s is weak: one angle for 13 s, the missile drifts right -> left in frame, the tail reads as a flat
+     glowing orange DISC (the nozzle face lit by the point light). Fix: two angles (behind, then a low side skim), a
+     volume exhaust glow instead of the lit disc, no y-drift on camB.
+  2. Title shot C2 29-35.5 s too dark (missile nearly a black silhouette under BRAHMOS / MACH 2.8): add a moonlit key.
+  3. Opening 0-14 s nearly static: stronger push on camA (the radar HUD overlay also adds change there).
+  I asked the user: fix these now (~27 min re-render) OR first composite the HUD overlay + Hinglish voice on this
+  version so they can judge it with sound. Ask again on the desktop.
+- Renders: write PNG frames (or snapshots) if the user wants live progress in the EngineX dashboard; an mp4 output shows
+  "No picture yet" until the end (the user asked why it was "not done").
+- Ch2 preview `72d416fd` and ch3 preview `33d7d187` ran after ch1 freed the GPU: check them first.
